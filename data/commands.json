@@ -1,0 +1,396 @@
+{
+    "commands": [
+        {
+            "name": "mywaifu",
+            "guilds": []
+        },
+        {
+            "name": "unload",
+            "guilds": []
+        },
+        {
+            "name": "actionchannel",
+            "guilds": []
+        },
+        {
+            "name": "botlisting",
+            "guilds": []
+        },
+        {
+            "name": "reload",
+            "guilds": []
+        },
+        {
+            "name": "8",
+            "guilds": []
+        },
+        {
+            "name": "rps",
+            "guilds": []
+        },
+        {
+            "name": "gif",
+            "guilds": []
+        },
+        {
+            "name": "balance",
+            "guilds": []
+        },
+        {
+            "name": "ping",
+            "guilds": []
+        },
+        {
+            "name": "filter_set",
+            "guilds": []
+        },
+        {
+            "name": "datew",
+            "guilds": []
+        },
+        {
+            "name": "clear",
+            "guilds": []
+        },
+        {
+            "name": "dice",
+            "guilds": []
+        },
+        {
+            "name": "beg",
+            "guilds": []
+        },
+        {
+            "name": "botinfo",
+            "guilds": []
+        },
+        {
+            "name": "uwu",
+            "guilds": []
+        },
+        {
+            "name": "dateh",
+            "guilds": []
+        },
+        {
+            "name": "kick",
+            "guilds": []
+        },
+        {
+            "name": "editroles",
+            "guilds": []
+        },
+        {
+            "name": "payout",
+            "guilds": []
+        },
+        {
+            "name": "userinfo",
+            "guilds": []
+        },
+        {
+            "name": "serverinfo",
+            "guilds": []
+        },
+        {
+            "name": "walk",
+            "guilds": []
+        },
+        {
+            "name": "roles",
+            "guilds": []
+        },
+        {
+            "name": "setup",
+            "guilds": []
+        },
+        {
+            "name": "ban",
+            "guilds": []
+        },
+        {
+            "name": "myhusbando",
+            "guilds": []
+        },
+        {
+            "name": "waifus",
+            "guilds": []
+        },
+        {
+            "name": "prefix",
+            "guilds": []
+        },
+        {
+            "name": "unban",
+            "guilds": []
+        },
+        {
+            "name": "Aremove",
+            "guilds": []
+        },
+        {
+            "name": "husbandos",
+            "guilds": []
+        },
+        {
+            "name": "mctrivia",
+            "guilds": []
+        },
+        {
+            "name": "filter",
+            "guilds": []
+        },
+        {
+            "name": "avatar",
+            "guilds": []
+        },
+        {
+            "name": "Aadd",
+            "guilds": []
+        },
+        {
+            "name": "invite",
+            "guilds": []
+        },
+        {
+            "name": "filtertype",
+            "guilds": []
+        },
+        {
+            "name": "totalAimages",
+            "guilds": []
+        },
+        {
+            "name": "embed",
+            "guilds": []
+        },
+        {
+            "name": "changelog",
+            "guilds": []
+        },
+        {
+            "name": "botserver",
+            "guilds": []
+        },
+        {
+            "name": "Arelink",
+            "guilds": []
+        },
+        {
+            "name": "cfilter",
+            "guilds": []
+        },
+        {
+            "name": "announce",
+            "guilds": []
+        },
+        {
+            "name": "getmsg",
+            "guilds": []
+        },
+        {
+            "name": "hug",
+            "guilds": []
+        },
+        {
+            "name": "disableCommand",
+            "guilds": []
+        },
+        {
+            "name": "listAnime",
+            "guilds": []
+        },
+        {
+            "name": "msgsend",
+            "guilds": []
+        },
+        {
+            "name": "servers",
+            "guilds": []
+        },
+        {
+            "name": "flipthecoin",
+            "guilds": []
+        },
+        {
+            "name": "mcstatus",
+            "guilds": []
+        },
+        {
+            "name": "create_poll",
+            "guilds": []
+        },
+        {
+            "name": "bothug",
+            "guilds": []
+        },
+        {
+            "name": "enableCommand",
+            "guilds": []
+        },
+        {
+            "name": "covid",
+            "guilds": []
+        },
+        {
+            "name": "shutdown",
+            "guilds": []
+        },
+        {
+            "name": "bothugself",
+            "guilds": []
+        },
+        {
+            "name": "welcome",
+            "guilds": []
+        },
+        {
+            "name": "neko",
+            "guilds": []
+        },
+        {
+            "name": "Cogs",
+            "guilds": []
+        },
+        {
+            "name": "rob",
+            "guilds": []
+        },
+        {
+            "name": "hugself",
+            "guilds": []
+        },
+        {
+            "name": "welcomechannel",
+            "guilds": []
+        },
+        {
+            "name": "load",
+            "guilds": []
+        },
+        {
+            "name": "Arename",
+            "guilds": []
+        },
+        {
+            "name": "slap",
+            "guilds": []
+        },
+        {
+            "name": "logchannel",
+            "guilds": []
+        },
+        {
+            "name": "test",
+            "guilds": []
+        },
+        {
+            "name": "__filter_set",
+            "guilds": []
+        },
+        {
+            "name": "embedList",
+            "guilds": []
+        },
+        {
+            "name": "changeEmbed",
+            "guilds": []
+        },
+        {
+            "name": "add_server",
+            "guilds": []
+        },
+        {
+            "name": "help",
+            "guilds": []
+        },
+        {
+            "name": "patreon",
+            "guilds": []
+        },
+        {
+            "name": "Oservers",
+            "guilds": []
+        },
+        {
+            "name": "privicy",
+            "guilds": []
+        },
+        {
+            "name": "set_maintenance",
+            "guilds": []
+        },
+        {
+            "name": "set_default",
+            "guilds": []
+        },
+        {
+            "name": "payday",
+            "guilds": []
+        },
+        {
+            "name": "gamble",
+            "guilds": []
+        },
+        {
+            "name": "suggest",
+            "guilds": []
+        },
+        {
+            "name": "leaderboard",
+            "guilds": []
+        },
+        {
+            "name": "cogs",
+            "guilds": []
+        },
+        {
+            "name": "_set",
+            "guilds": []
+        },
+        {
+            "name": "set",
+            "guilds": []
+        },
+        {
+            "name": "channel",
+            "guilds": []
+        },
+        {
+            "name": "anime",
+            "guilds": []
+        },
+        {
+            "name": "menu",
+            "guilds": []
+        },
+        {
+            "name": "image",
+            "guilds": []
+        },
+        {
+            "name": "welcome_test",
+            "guilds": []
+        },
+        {
+            "name": "pat",
+            "guilds": []
+        },
+        {
+            "name": "botspam",
+            "guilds": []
+        },
+        {
+            "name": "warning",
+            "guilds": []
+        },
+        {
+            "name": "_react",
+            "guilds": []
+        },
+        {
+            "name": "react",
+            "guilds": []
+        }
+    ]
+}

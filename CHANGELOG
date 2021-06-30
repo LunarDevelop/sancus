@@ -1,0 +1,276 @@
+Version 0.0.1
+Date = 14/11/20
+
+New commands:
+  -kick
+  -ban
+  -unban
+  -8ball
+  -clear
+  -load
+  -unload
+  -reload
+
+New Features:
+  -Error system for:
+    -CommandNotFound
+    -MissingRequiredArgument
+  -Cogs system, organized files
+  -Boot messages
+  -Embeded messages
+
+Bug Fixes/Functionality Tweeks:
+    -None
+
+Version 0.1.0
+Date = 15/11/20
+
+-Moved Ping command to Moderation
+
+New Features
+  -Error system for
+    -DisabledCommand
+    -TooManyArguments
+    -CommandOnCooldown
+  -Join/remove system up and running
+
+Bug Fixes/Functionality Tweeks:
+    -None
+
+Version = 0.1.1
+Date = 16/11/20
+
+-ChangeLog feature added
+
+New Commands:
+  -github
+
+Bug Fixes/Functionality Tweeks:
+    -None
+
+Version = 0.2.0
+Date = 17/11/20
+
+New Commands:
+  -help
+  -prefix
+
+New Features:
+  -Custom prefix system
+
+Version = 0.3.0
+Date = 22/11/20
+
+New commamnds:
+  -coinflip
+  -settings
+  -payout
+  -beg
+  -balance
+  -rps
+  -dice
+
+New Features:
+  -Custom channel selector (using ids)
+  -Send message upon kicking or banning to the user with the reason included.
+  -Economy is finally here
+
+Bug Fixes/Functionality Tweeks:
+  -reload command now works
+  -help command now has all the commands on it
+  -mod commands now are permission limited
+
+Version 0.3.1
+Date = 22/11/20
+
+New commamnds:
+  -gitlab
+
+Bug Fixes/Functionality Tweeks:
+  -Prefix bug fixed
+
+Version 0.4.0
+Date = 24/11/20
+
+New commands:
+  -covid19
+
+New Features:
+  -Command cooldown added to Economy payout and beg commands
+  
+Bug Fixes/Functionality Tweeks:
+  - Joining server now creates instance in json file
+
+Version 1.0.0
+Date = 1/12/20
+
+New commands:
+  -advent
+  -countdown
+  -hug
+  -update (For admin)
+  -leaderboard
+
+New feature:
+  -Filter funtionality
+  -Auto checker for jsons files at bot startup
+  -Moving over to databases (not fully yet)
+  -ReWork on the entire code.
+
+Bug Fixes/Functionality Tweeks:
+    -None
+
+Version 1.1.0
+Date = 13/12/20
+
+New commands:
+    -embed
+
+New features:
+    -None
+
+Bug Fixes/Functionality Tweeks:
+    -Folder system in place
+    -Filter now runs on database system
+    -Channels now work on the Database
+    -Economy is now on the database
+    -Clear command now is rate limited to provide faster service
+
+Version 1.2.0
+Date = 17/12/20
+
+New commands:
+    -adminhelp
+    -Userinfo
+    -msg send
+    -announcement
+
+New features:
+    -embed now has custom colours
+    -embed now has an image feature
+
+Bug Fixes/Functionality Tweeks:
+    -embed now checks that it is the same user and in the same channel
+
+
+Version = 2.0.0
+Date = 16/02/21
+
+  New commands:
+    -waifus
+    -husbandos
+    -gifs
+    -mcserverstatus
+    -create_poll
+    -setup
+    -disable/enable command
+    -rob
+    -filterset
+    -cogs
+    -shutdown
+    -hug
+    -hugself
+    -bothug
+    -botselfhug
+
+  New features:
+    -n/a
+
+  Bug Fixes/Functionality Tweeks:
+    -n/a
+
+Version = 2.1.0
+Date = 26/02/21
+
+Series of Small updates: Anime Update
+New commands:
+    -totalAimages
+
+New features:
+    -n/a
+
+Bug Fixes/Functionality Tweeks:
+    -Fixed a few issues with help.
+
+Version = 2.2.0
+Date = 28/02/21
+
+  Series of Small updates: Anime Update
+  New commands:
+    -n/a
+
+  New features:
+    -n/a
+
+  Bug Fixes/Functionality Tweeks:
+    -Covid command using new api
+
+Version = 3.0.0
+Date = 10/03/21
+
+Config Update, now using configparser
+PUBLIC RELEASE VERSION
+
+New commands:
+    -patreon
+    -embedList
+    -changeembed
+
+  New features:
+    -changing embed colours
+    -dpymenus are now in use
+    -waifus/husbandos ID included
+    -waifus/husbandos rename teller
+
+  Bug Fixes/Functionality Tweeks:
+    -Config system
+
+Version = 3.1.0
+Date = 13/03/21
+
+New commands:
+  -{owner}Oservers
+  -{owner}change_default
+  -{owner}Maintenance Mode
+
+New features:
+  -Log channel for those who invite Sancus
+  -Commands are logged
+  -Sancus can no go into Maintenance mode which will give a warning when a command is entered
+
+Bug Fixes/Functionality Tweeks:
+  -n/a
+
+Version = 3.2.0
+Date = 01/03/21
+
+New commands:
+  - suggestions
+
+New features:
+  - Cancelled and Timeout pages for menu commands
+  - Commands are now logged some can pull the status of how many commands have been run in a day
+
+Bug Fixes/Functionality Tweeks:
+  - Suggestion are now done using the suggestion command
+  - Config v3.1 now working
+  - Currently Econ commands are in WIP
+  - Grouping commands as started
+
+Version = 3.3.0
+Date = 01/04/21
+
+New commands:
+  - image {anime, wallpaper, nekopara, azurlane, slap, meow, pat, memes, doki, chibi, (nsfw) : lewd, nsfwazurlane, nsfwnekopara, hentia, femdom, cum}
+  - pat
+  - slap
+  - hug
+  - setup welcome help
+  - setup
+
+New features:
+  - Ablity to use a banner as your welcome message and not just a message
+
+Bug Fixes/Functionality Tweeks:
+  - slap and hug and been reformed to use images as well
+  - Economy commands now working on their own cooldown timer for customing
