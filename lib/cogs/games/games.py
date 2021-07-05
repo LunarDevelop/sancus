@@ -38,58 +38,65 @@ class Games(Cog):
     
     @command(aliases=['ftc', 'cf', 'coinflip'])
     async def flipthecoin(self, ctx, *, hot):
-        
-        ran = random.randint(0,1)
-        if hot == 't':
-            if ran == 1:
-                await ctx.send("TAILS! You won!")
-            else:
-                await ctx.send("HEADS! You lose.")
-        
-        elif hot == 'h':
-            if ran == 0:
-                await ctx.send("HEADS! You won!")
-            else:
-                await ctx.send("TAILS! You lose.")
+        if hot.lower() in ["t","h"]:
+            ran = random.randint(0,1)
+            if hot.lower() == 't':
+                if ran == 1:
+                    await ctx.send("TAILS! You won!")
+                else:
+                    await ctx.send("HEADS! You lose.")
+
+            elif hot.lower() == 'h':
+                if ran == 0:
+                    await ctx.send("HEADS! You won!")
+                else:
+                    await ctx.send("TAILS! You lose.")
+        else:
+            await ctx.send("Please choose between `h` for heads and `t` for tails")
 
     @command()
     async def rps(self, ctx, *, player_input):
-        ran = random.randint(0,2)
-        if ran == 0:
-            ai_input = 'Rock'
-            await ctx.send(f"Sancus played: {ai_input}")
-            if player_input.lower() == 'paper':
-                await ctx.send("You won!")
-            
-            elif player_input.lower() == 'rock':
-                await ctx.send("You tied!")
+        
+        if playery.lower() in ["rock","paper","scissors"]
+            ran = random.randint(0,2)
+            if ran == 0:
+                ai_input = 'Rock'
+                await ctx.send(f"Sancus played: {ai_input}")
+                if player_input.lower() == 'paper':
+                    await ctx.send("You won!")
 
-            elif player_input.lower() == 'scissors':
-                await ctx.send("You lost!")
+                elif player_input.lower() == 'rock':
+                    await ctx.send("You tied!")
 
-        elif ran == 1:
-            ai_input = 'Paper'
-            await ctx.send(f"Sancus played: {ai_input}")
-            if player_input.lower() == 'scissors':
-                await ctx.send("You won!")
+                elif player_input.lower() == 'scissors':
+                    await ctx.send("You lost!")
 
-            elif player_input.lower() == 'paper':
-                await ctx.send("You tied!")
-            
-            elif player_input.lower() == 'rock':
-                await ctx.send("You lost!")
+            elif ran == 1:
+                ai_input = 'Paper'
+                await ctx.send(f"Sancus played: {ai_input}")
+                if player_input.lower() == 'scissors':
+                    await ctx.send("You won!")
 
-        elif ran == 2:
-            ai_input = 'Scissors'
-            await ctx.send(f"Sancus played: {ai_input}")
-            if player_input.lower() == 'rock':
-                await ctx.send("You won!")
+                elif player_input.lower() == 'paper':
+                    await ctx.send("You tied!")
 
-            elif player_input.lower() == 'scissors':
-                await ctx.send("You tied!")
-            
-            elif player_input.lower() == 'paper':
-                await ctx.send("You lost!")
+                elif player_input.lower() == 'rock':
+                    await ctx.send("You lost!")
+
+            elif ran == 2:
+                ai_input = 'Scissors'
+                await ctx.send(f"Sancus played: {ai_input}")
+                if player_input.lower() == 'rock':
+                    await ctx.send("You won!")
+
+                elif player_input.lower() == 'scissors':
+                    await ctx.send("You tied!")
+
+                elif player_input.lower() == 'paper':
+                    await ctx.send("You lost!")
+                    
+        else:
+            await ctx.send("Invaild Option\nYou can choose betwwen:\n`rock`, `paper` or `scissors`")
     
     @command()
     #@cooldown(1, 30, commands.BucketType.user)
