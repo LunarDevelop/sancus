@@ -130,10 +130,13 @@ class Mod(
         
     @command()
     @has_permissions(ban_members=True)
-    async def ban(self, ctx, member : discord.Member, *, reason=None):
+    async def ban(self, ctx, member : discord.Member, *, reason="No reason was provided"):
         """
             Bans a user using either a ID or a full username
         """
+        try:
+            member = await ctx.guild.fetch_member(int(member))
+        except:pass
 
         mtoprole = member.top_role.position
         ctxtoprole = ctx.author.top_role.position
@@ -142,23 +145,31 @@ class Mod(
 
         if member.id != ctx.author.id and mtoprole < ctxtoprole and member.id != guildowner:
 
-            await member.send(f'You have been banned from {ctx.guild.name}.\nReason: {reason}')   
-
             banned = discord.Embed(
                 title = f'<@{member.id}> has been banned',
                 description = f'Reason: {reason}',
                 colour = getEmbed(ctx.guild.id, "mod_ban"),
                 timestamp = datetime.utcnow()
             )
+            
             try:
                 channel = get_action_channel(self, ctx.guild.id)
                 await channel.send(embed=banned)
+                
+            except: pass
+                #print(f"No action channel has been set for {ctx.guild.id}")
+                
+            try:
+                memberchannel = await member.create_dm()
+                await memberchannel.send(f'You have been banned from {ctx.guild.name}.\nReason: {reason}')
+                await member.ban(reason=reason)
+                await ctx.send(f"<@{member.id}>, has been banned")
+                
 
             except:
-                print(f"No action channel has been set for {ctx.guild.id}")
-                await ctx.send(f"<@{member.id}>, has been banned")
-
-            await member.ban(reason = reason)
+                await ctx.send("There has been and error with the command!\nEnsure that the person you are trying to ban does not have a role above the bot, and try again.")
+        else:
+            await ctx.send("You cannot ban this user!")
 
     @command()
     @has_permissions(ban_members=True)
@@ -166,25 +177,37 @@ class Mod(
         """Unbans the user.
             
             Uses the full username and discriminator, like 'Sol_Tester#7014'
+            You cannot tag the user you will need to find username and discriminator out
         """
-
+        check = False
         banned_users = await ctx.guild.bans()
 
         try:
             member_name, member_discriminator = member.split('#')
         except:pass
+        
+        try:
+            member_name = member.name
+            member_discriminator = member.discriminator
+        
+        except:
+            pass
 
         for ban_entry in banned_users:
             user = ban_entry.user
             try:
                 if (user.name, user.discriminator) == (member_name, member_discriminator):
-                    await ctx.guild.unban(user)
-
-                    print(f'{user.id}, @{user.name}#{user.discriminator} has been unbanned')
+                    check == True
+                    
+                    try:
+                        await ctx.guild.unban(user)
+                    
+                    except:
+                        await ctx.send("An error has occured while trying to unban the user.\n*Try again or contact SolarBAM#0404")
                     
                     unbanned = discord.Embed(
                         title = f'{user.mention} has been unbanned',
-                        description = 'WIP',
+                        #description = 'WIP',
                         colour = getEmbed(ctx.guild.id, "mod_unban"),
                         timestamp = datetime.utcnow()
                         )
@@ -193,11 +216,12 @@ class Mod(
                         await channel.send(embed=unbanned)
 
                     except:
-                        print(f"No action channel has been set for {ctx.guild.id}")
+                        #print(f"No action channel has been set for {ctx.guild.id}")
                         await ctx.send(f"<@{user.id}>, has been unbanned")
             
             except:
                 if user.id == member:
+                    check == True
                     await ctx.guild.unban(user)
 
                     print(f'{user.id}, @{user.name}#{user.discriminator} has been unbanned')
@@ -212,8 +236,11 @@ class Mod(
                         await channel.send(embed=unbanned)
 
                     except:
-                        print(f"No action channel has been set for {ctx.guild.id}")
+                        #print(f"No action channel has been set for {ctx.guild.id}")
                         await ctx.send(f"<@{user.id}>, has been unbanned")
+                        
+            if check != True:
+                await ctx.send("Cannot unban user.\nThey might not be banned or you spelled their name incorrectly.\n*Try again if you want*")
 
     @command()
     @has_permissions(manage_messages=True)
@@ -404,8 +431,8 @@ class Mod(
 
         await channel.send(embed=embed)
    
-    @command()
-    @has_permissions(manage_guild=True)
+    #@command()
+    #@has_permissions(manage_guild=True)
     async def announce(self, ctx):
         """ 
             Creates a message with a phantom @everyone before hand.
