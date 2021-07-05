@@ -57,7 +57,7 @@ class Games(Cog):
     @command()
     async def rps(self, ctx, *, player_input):
         
-        if playery.lower() in ["rock","paper","scissors"]
+        if player_input.lower() in ["rock","paper","scissors"]:
             ran = random.randint(0,2)
             if ran == 0:
                 ai_input = 'Rock'
