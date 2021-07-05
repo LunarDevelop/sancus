@@ -133,7 +133,7 @@ class Owner(
         await ctx.send(embed=embed)
 
 ###Commands
-    @Cog.listener()
+    #@Cog.listener()
     async def on_command(self, ctx):
         with open("./data/config.ini", 'r') as configFile:
             Config.read_file(configFile)

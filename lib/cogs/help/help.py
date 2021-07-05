@@ -15,7 +15,7 @@ class Help(Cog):
 
     def page_one(self):
         embed = Embed(
-            title = "Economy Commands {Currently Disabled Due to Updates}",
+            title = "Economy Commands",
             description = "Use the arrows which the bot has reacted with to change the pages"
         )
 
@@ -102,7 +102,7 @@ class Help(Cog):
                 ("userinfo / ui {userid}", "Get information about a user"),
                 ("serverinfo / si", "Get information about your server"),
                 ("embed", "Send and embed message to a channel on your server/guild"),
-                ("announce", "Sends an announcement to a channel for you."),
+                #("announce", "Sends an announcement to a channel for you."),
                 ("msgsend", "Sends a message to a channel for you"),
                 ("setup menu", "Loads up an embed message with all the settings for the bot")
             ]
@@ -158,7 +158,7 @@ class Help(Cog):
         else:
 
             menu = PaginatedMenu(ctx)
-            menu.set_timeout(90)
+            menu.set_timeout(30)
 
             page1 = self.page_one()
             page2 = self.page_two()
