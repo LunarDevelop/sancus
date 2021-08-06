@@ -33,7 +33,7 @@ class Econ(
             colour = self.oldConfig.embed(ctx.guild.id, 'econ_balance')
         )
         bank = b(ctx.author.id)
-        wallet, account = bank.get_balance()
+        account, wallet = bank.get_balance()
 
         embed.add_field(name="Wallet:", value=str(wallet), inline=False)
         embed.add_field(name="Bank Account:", value=str(account), inline=False)
