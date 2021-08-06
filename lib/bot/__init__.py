@@ -6,6 +6,8 @@ from discord import Intents
 from discord.ext.commands import Bot as BaseBot
 from discord.ext import commands
 
+from discord_components import DiscordComponents, Button, Select, SelectOption
+
 #functions imports
 from functions.apiConnection import APIconfig, ApiConnection
 from functions.consoleColours import colours
@@ -36,6 +38,11 @@ class Bot(BaseBot):
         self.ready = False
         self.Version = BaseBot
         self.exceptions = exceptions
+        
+        self.embedAuthorUrl = "https://images-ext-2.discordapp.net/external/PR2dRBWGoEAaqJ44iktdKFKAw4-rgZPbsp9B7zxO0YQ/%3Fsize%3D1024/https/cdn.discordapp.com/icons/789941733998854176/c9938e932be5bb6ee2ba6eed81d8c6f7.webp"
+        self.embedAuthorName = "Solar Productions"
+        
+        self.help_instance = []
 
         self.description = "Sancus is a multifunction bot designed and created by Solar Productions for managing their servers"
         
@@ -149,6 +156,8 @@ class Bot(BaseBot):
             #print("Scheduler for saving config started....")
 
             print(f"{colours.OKGREEN}{self.user.name} Ready{colours.ENDC}")
+            
+            self.DiscordComponents = DiscordComponents(bot)
             
     async def on_guild_join(self, guild):
         
