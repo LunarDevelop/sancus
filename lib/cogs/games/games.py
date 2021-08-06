@@ -1,8 +1,10 @@
-import discord
+from discord import Embed
 from discord.ext.commands import command, Cog
 import random
 
 from asyncio import sleep
+
+from discord_components import Button
 
 class Games(Cog):
 
@@ -55,49 +57,110 @@ class Games(Cog):
             await ctx.send("Please choose between `h` for heads and `t` for tails")
 
     @command()
-    async def rps(self, ctx, *, player_input):
+    async def rps(self, ctx):
+        """Version 6
+        Now get to put your choice instead of typing it"""
+        
+        player_input = None
+        
+        RockEmoji = self.client.get_emoji(873215841360035861)
+        PaperEmoji = self.client.get_emoji(873215881147215912)
+        ScissorsEmoji = self.client.get_emoji("scissors")
+        
+        embed = Embed(
+            description = "What do you want to draw?",
+            colour = 0x000d16532
+        )
+        
+        msg = await ctx.send(
+            embed=embed,
+            components=[[
+                Button(label = "Rock", id="rock", emoji=RockEmoji),
+                Button(label = "Paper", id="paper", emoji=PaperEmoji),
+                Button(label = "Scissors", id="scissors", emoji="✂️")
+            ]]
+            )
+        
+        interaction = await self.client.wait_for("button_click", check= lambda x: x.user.id == ctx.author.id)
+        
+        await interaction.respond(type=6)
+        
+        player_input = interaction.custom_id
+        
         
         if player_input.lower() in ["rock","paper","scissors"]:
             ran = random.randint(0,2)
             if ran == 0:
                 ai_input = 'Rock'
-                await ctx.send(f"Sancus played: {ai_input}")
                 if player_input.lower() == 'paper':
-                    await ctx.send("You won!")
+                    await msg.edit(embed=Embed(
+                        title = "You Won!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
                 elif player_input.lower() == 'rock':
-                    await ctx.send("You tied!")
+                    await msg.edit(embed=Embed(
+                        title = "You Tied!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
                 elif player_input.lower() == 'scissors':
-                    await ctx.send("You lost!")
+                    await msg.edit(embed=Embed(
+                        title = "You Lost!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
             elif ran == 1:
                 ai_input = 'Paper'
-                await ctx.send(f"Sancus played: {ai_input}")
                 if player_input.lower() == 'scissors':
-                    await ctx.send("You won!")
+                    await msg.edit(embed=Embed(
+                        title = "You Won!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
                 elif player_input.lower() == 'paper':
-                    await ctx.send("You tied!")
+                    await msg.edit(embed=Embed(
+                        title = "You Tied!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
                 elif player_input.lower() == 'rock':
-                    await ctx.send("You lost!")
+                    await msg.edit(embed=Embed(
+                        title = "You Lost!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
             elif ran == 2:
                 ai_input = 'Scissors'
-                await ctx.send(f"Sancus played: {ai_input}")
                 if player_input.lower() == 'rock':
-                    await ctx.send("You won!")
-
+                    await msg.edit(embed=Embed(
+                        title = "You Won!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}.",
+                        colour= 0x000d16532
+                    ), components=[])
                 elif player_input.lower() == 'scissors':
-                    await ctx.send("You tied!")
+                    await msg.edit(embed=Embed(
+                        title = "You Tied!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
 
                 elif player_input.lower() == 'paper':
-                    await ctx.send("You lost!")
-                    
+                    await msg.edit(embed=Embed(
+                        title = "You Lost!",
+                        description = f"Sancus played: {ai_input}\nYour input: {player_input.capitalize()}",
+                        colour= 0x000d16532
+                    ), components=[])
+                                        
         else:
             await ctx.send("Invaild Option\nYou can choose betwwen:\n`rock`, `paper` or `scissors`")
-    
+
     @command()
     #@cooldown(1, 30, commands.BucketType.user)
     async def dice(self, ctx, *, number=1):
