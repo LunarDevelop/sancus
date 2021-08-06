@@ -190,7 +190,7 @@ class helpButtons(Cog):
         self.client = client
         
     @command(name="help")
-    async def buttons(self, ctx):
+    async def buttons(self, ctx):      
         await ctx.message.delete()
         
         ModEmoji = self.client.get_emoji(872992608354443314)
@@ -204,41 +204,18 @@ class helpButtons(Cog):
         if len(self.client.help_instance) != 0:
             for name, instance, message in self.client.help_instance:
                 if name == ctx.author.id:
-                    time = datetime.strptime(instance, ("%H,%M"))
                     
-                    if time - timedelta(minutes=2):
-                        waitmsg = await ctx.send(embed=Embed(
-                            description="Please wait till the last help is cancel or click the button below to end it and run the command again."
-                        ),
-                            components=[Button(label="Cancel Previous Help Command", emoji = CloseEmoji, style=4, id="close_now")])
+                    channel = self.client.get_channel(instance)
+                    
+                    try:
+                        pre_message = await channel.fetch_message(int(message))
+                        await pre_message.delete()
                         
-                        try:
-                            interaction = await self.client.wait_for("button_click", timeout=15)
-                            await interaction.respond(type=6)
+                        self.client.help_instance.remove((name,instance,message))
+                        break                                 
+                    except:
+                        self.client.help_instance.remove((name,instance,message))
                             
-                            if interaction.custom_id == "close_now":
-                                for guild in self.client.guilds:
-                                    for channel in guild.channels:
-                                        try:
-                                            pre_message = await channel.fetch_message(int(message))
-                                            await pre_message.delete()
-                                            await waitmsg.edit(embed=Embed(
-                                                description="Try the command again, after this message has been deleted in 4 seconds."
-                                                    ),
-                                                components=[],
-                                                delete_after = 3.5
-                                                )
-                                            
-                                            self.client.help_instance.remove((name,instance,message))
-                                            return
-                                                                                    
-                                        except:
-                                            pass
-                            
-                        except asyncio.TimeoutError:
-                            await waitmsg.delete()
-                            return
-        
         embed =Embed(
                 title = "Welcome to the new and improved help command",
                 description = "All you need to do is click a button below. \n\n**Please close this instance or wait for a time out before doing another help command for yourself**"
@@ -259,59 +236,47 @@ class helpButtons(Cog):
                     ]
                     ]
             )
-        
-        time=datetime.utcnow().strftime("%H,%M")
-        
-        self.client.help_instance.append((ctx.author.id, time, msg.id))
-        indexInt = self.client.help_instance.index((ctx.author.id, time, msg.id))
-        data = self.client.help_instance[indexInt]
+                
+        self.client.help_instance.append((ctx.author.id, ctx.channel.id, msg.id))
         
         while True:
-            try:
-                interaction = await self.client.wait_for("button_click", timeout=120, check = lambda i: i.user.id == ctx.author.id)
-                
-                if interaction.custom_id == "mod":
-                    await msg.edit(content="",embed=self.Mod())
+                try:
+                    interaction = await self.client.wait_for("button_click", timeout=120, check = lambda i: i.user.id == ctx.author.id)
                     
-                elif interaction.custom_id == "econ":
-                    await msg.edit(content="",embed=self.Econ())
+                    if interaction.custom_id == "mod":
+                        await msg.edit(content="",embed=self.Mod())
+                        
+                    elif interaction.custom_id == "econ":
+                        await msg.edit(content="",embed=self.Econ())
+                        
+                    elif interaction.custom_id == "games":
+                        await msg.edit(content="",embed=self.Games())
                     
-                elif interaction.custom_id == "games":
-                    await msg.edit(content="",embed=self.Games())
-                
-                elif interaction.custom_id == "misc":
-                    await msg.edit(content="", embed=self.Misc())
+                    elif interaction.custom_id == "misc":
+                        await msg.edit(content="", embed=self.Misc())
+                        
+                    elif interaction.custom_id == "close":
+                        await msg.delete()
+                        self.client.help_instance.remove((ctx.author.id, ctx.channel.id, msg.id))
+                        return
+                        
+                    elif interaction.custom_id == "open":
+                        await msg.edit(content="", components=[])
+                        self.client.help_instance.remove((ctx.author.id, ctx.channel.id, msg.id))
+                        return
+                        
+                    await interaction.respond(type=6)
                     
-                elif interaction.custom_id == "close":
-                    await msg.delete()
-                    self.client.help_instance.remove((ctx.author.id, time, msg.id))
+                except asyncio.TimeoutError:
+                    embed = Embed(
+                        description = "You have been timed out, be quicker :smile:"
+                    )
+                    
+                    await msg.edit(content="", components=[], embed=embed)
+                    self.client.help_instance.remove((ctx.author.id, ctx.channel.id, msg.id))
                     return
-                    
-                elif interaction.custom_id == "open":
-                    await msg.edit(content="", components=[])
-                    self.client.help_instance.remove((ctx.author.id, time, msg.id))
-                    return
-                    
-                else:
-                    await msg.edit(content="FAILED")
-                    
-                await interaction.respond(type=6)
-                
-            except asyncio.TimeoutError:
-                embed = Embed(
-                    description = "You have been timed out, be quicker :smile:"
-                )
-                
-                await msg.edit(content="", components=[], embed=embed)
-                self.client.help_instance.remove((ctx.author.id, time, msg.id))
-                return
-
-            time=datetime.utcnow().strftime("%H,%M")
-            
-            data = list(self.client.help_instance[indexInt])
-            data[1] = time
-            self.client.help_instance[indexInt] = tuple(data)     
-            
+        
+ 
     def Econ(self):
         embed = Embed(
             title = "Economy",
