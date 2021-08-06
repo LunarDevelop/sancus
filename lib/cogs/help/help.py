@@ -210,29 +210,30 @@ class helpButtons(Cog):
                         waitmsg = await ctx.send(embed=Embed(
                             description="Please wait till the last help is cancel or click the button below to end it and run the command again."
                         ),
-                            components=[Button(label="Cancel Previous Help Command", emoji = CloseEmoji, style=4)])
+                            components=[Button(label="Cancel Previous Help Command", emoji = CloseEmoji, style=4, id="close_now")])
                         
                         try:
                             interaction = await self.client.wait_for("button_click", timeout=15)
                             await interaction.respond(type=6)
                             
-                            for guild in self.client.guilds:
-                                for channel in guild.channels:
-                                    try:
-                                        pre_message = await channel.fetch_message(int(message))
-                                        await pre_message.delete()
-                                        await waitmsg.edit(embed=Embed(
-                                            description="Try the command again, after this message has been deleted in 4 seconds."
-                                                ),
-                                            components=[],
-                                            delete_after = 3.5
-                                            )
-                                        
-                                        self.client.help_instance.remove((name,instance,message))
-                                        return
-                                                                                   
-                                    except:
-                                        pass
+                            if interaction.custom_id == "close_now":
+                                for guild in self.client.guilds:
+                                    for channel in guild.channels:
+                                        try:
+                                            pre_message = await channel.fetch_message(int(message))
+                                            await pre_message.delete()
+                                            await waitmsg.edit(embed=Embed(
+                                                description="Try the command again, after this message has been deleted in 4 seconds."
+                                                    ),
+                                                components=[],
+                                                delete_after = 3.5
+                                                )
+                                            
+                                            self.client.help_instance.remove((name,instance,message))
+                                            return
+                                                                                    
+                                        except:
+                                            pass
                             
                         except asyncio.TimeoutError:
                             await waitmsg.delete()
@@ -262,7 +263,8 @@ class helpButtons(Cog):
         time=datetime.utcnow().strftime("%H,%M")
         
         self.client.help_instance.append((ctx.author.id, time, msg.id))
-        print(self.client.help_instance)
+        indexInt = self.client.help_instance.index((ctx.author.id, time, msg.id))
+        data = self.client.help_instance[indexInt]
         
         while True:
             try:
@@ -283,11 +285,11 @@ class helpButtons(Cog):
                 elif interaction.custom_id == "close":
                     await msg.delete()
                     self.client.help_instance.remove((ctx.author.id, time, msg.id))
-                    print(self.client.help_instance)
                     return
                     
                 elif interaction.custom_id == "open":
                     await msg.edit(content="", components=[])
+                    self.client.help_instance.remove((ctx.author.id, time, msg.id))
                     return
                     
                 else:
@@ -301,7 +303,14 @@ class helpButtons(Cog):
                 )
                 
                 await msg.edit(content="", components=[], embed=embed)
+                self.client.help_instance.remove((ctx.author.id, time, msg.id))
                 return
+
+            time=datetime.utcnow().strftime("%H,%M")
+            
+            data = list(self.client.help_instance[indexInt])
+            data[1] = time
+            self.client.help_instance[indexInt] = tuple(data)     
             
     def Econ(self):
         embed = Embed(
