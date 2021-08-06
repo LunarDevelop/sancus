@@ -32,20 +32,20 @@ class Misc(Trivia,
 
     @command(name="botserver", brief="Join the offical server for Sancus ")
     async def botserver(self,ctx):
-        await ctx.send(f"{ctx.author.mention}, come and joining my official server: https:discord.gg/XZB8mnY6f8 :flag_white: ")
+        await ctx.send(f"{ctx.author.mention}, come and joining my official server: https://discord.gg/XZB8mnY6f8 :flag_white: ")
 
     @command()
     async def hug(self, ctx, member : Member):
         url = "https://nekos.life/api/v2/img/hug"
 
-        r = requests.get(url=url)
+        r = requests.get(url=url).json()
 
         embed = Embed(
             description=f"{member.mention} you have received a hug by {ctx.author.mention}",
-            colour = self.config.embed(ctx.guild.id, "anime_image_nekopara")
+            colour = bot.oldConfig.embed(ctx.guild.id, "anime_image_nekopara")
         )
 
-        embed.set_image(url=json.loads(r.content.decode("UTF-8"))['url'])
+        embed.set_image(url=r["url"])
 
         embed.set_footer(text = f"{datetime.utcnow().strftime('%B %d %Y - %H:%M UTC')}")
 
@@ -59,7 +59,7 @@ class Misc(Trivia,
 
         embed = Embed(
             description=f"{member.mention} you have received a pat by {ctx.author.mention}",
-            colour = self.config.embed(ctx.guild.id, "anime_image_nekopara")
+            colour = bot.oldConfig.embed(ctx.guild.id, "anime_image_nekopara")
         )
 
         embed.set_image(url=json.loads(r.content.decode("UTF-8"))['url'])
@@ -88,7 +88,7 @@ class Misc(Trivia,
 
         embed = Embed(
             description=f"{member.mention} you have received a slap by {ctx.author.mention}",
-            colour = self.config.embed(ctx.guild.id, "anime_image_nekopara")
+            colour = bot.oldConfig.embed(ctx.guild.id, "anime_image_nekopara")
         )
 
         embed.set_image(url=json.loads(r.content.decode("UTF-8"))['url'])
@@ -97,7 +97,7 @@ class Misc(Trivia,
 
         await ctx.send(embed=embed)
 
-    @command()
+    #@command()
     async def botlisting(self, ctx):
         embed = Embed(
             title = f"Sancus is avaliable on the following listing sites",
