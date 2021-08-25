@@ -1,4 +1,6 @@
+import asyncio
 from asyncio.tasks import sleep
+from datetime import datetime
 from lib import bot
 
 from functions.apiConnection import APIconfig, ApiConnection
@@ -11,9 +13,14 @@ from glob import glob
 from configparser import ConfigParser
 
 from discord.ext.commands import command, is_owner, Cog, group
+from discord_slash import cog_ext
+from discord_slash.context import SlashContext
 
 from .mail import Mail
 from .acommands import Anime
+from .admin_slash import admin_slash
+
+from lib.bot import Bot
 
 ###COGS
 COGS = [path.split("\\")[-1][:-3] for path in glob("lib/cogs/**/*.py")]
@@ -31,6 +38,7 @@ cogsList = cogsList.split(" , ")
 class Owner(
         Mail,
         Anime,
+        admin_slash,
         Cog
         ):
 
@@ -191,7 +199,33 @@ class Owner(
     async def shutdown(self,ctx):
         self.config.save()
         exit()
-
+    
+    @command()
+    @is_owner()
+    async def get_emojis(self, ctx, channelID = ""):
+        await ctx.message.delete()
+        emoji_list = await ctx.guild.fetch_emojis()
+        
+        time = datetime.utcnow()
+        await asyncio.sleep(1)
+        
+        for emoji in emoji_list:
+            embed = Embed(
+                title=emoji.name,
+                description = f"{emoji.id}\n`<:{emoji.name}:{emoji.id}>`"
+            )
+            
+            embed.set_thumbnail(url=emoji.url)
+            
+            if channelID == "":
+                await ctx.send(embed=embed)
+            
+            else:
+                channel = await self.client.fetch_channel(channelID)
+                await channel.purge(limit=100, bulk=True, before=time)
+                await ctx.send(embed=embed)
+                
+            await asyncio.sleep(0.5)
 ###Cogs
     #Cogs Group
     @group(name="cogs")
