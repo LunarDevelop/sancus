@@ -272,7 +272,7 @@ class helpButtons(Cog):
                         description = "You have been timed out, be quicker :smile:"
                     )
                     
-                    await msg.edit(content="", components=[], embed=embed)
+                    await msg.edit(content="", components=[], embed=embed, delete_after=15)
                     self.client.help_instance.remove((ctx.author.id, ctx.channel.id, msg.id))
                     return
         
