@@ -20,11 +20,10 @@ class robBank(commands.Cog):
                 """ROBBED BANK"""
 
                 amount = random.randrange(1500,3000)
-                bank.add_bank_money(user, amount)
+                bank(ctx.author.id).add_bank_money(amount)
 
-                
-                wallet, bank_account = bank.get_balance(user)
-                
+                wallet, bank_account = bank(ctx.author.id).get_balance()
+
                 embed = discord.Embed(
                     title = ":moneybag: You have successfully rob Sancus Bank :moneybag:",
                     description = f"--You have earned {amount} for you troubles.--\n--That bring you total to {bank_account} in your bank.--",
@@ -37,9 +36,9 @@ class robBank(commands.Cog):
             else:
                 """FAILED"""
                 amount = random.randrange(650,1000)
-                bank.remove_bank_money(user, amount)
+                bank(ctx.author.id).remove_bank_money(amount)
 
-                wallet, bank_account = bank.get_balance(user)
+                wallet, bank_account = bank(ctx.author.id).get_balance()
 
                 embed = discord.Embed(
                     title = ":oncoming_police_car: You have failed to rob Sancus Bank :oncoming_police_car: ",
