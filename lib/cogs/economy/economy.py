@@ -35,8 +35,11 @@ class Econ(
         bank = b(ctx.author.id)
         account, wallet = bank.get_balance()
 
-        embed.add_field(name="Wallet:", value=str(wallet), inline=False)
-        embed.add_field(name="Bank Account:", value=str(account), inline=False)
+        embed.add_field(name="Wallet:", value=str(wallet), inline=True)
+        embed.add_field(name="Bank Account:", value=str(account), inline=True)
+        
+        embed.set_footer(text=self.client.embedAuthorName, 
+                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
 
@@ -81,6 +84,9 @@ class Econ(
                 embed.add_field(name=name, value=value, inline=False)
 
             embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819496847990063114/829872480545013790/Timer-595b40b65ba036ed117d45fc.png")
+            
+            embed.set_footer(text=self.client.embedAuthorName, 
+                             icon_url=self.client.embedAuthorUrl)
 
             await ctx.send(embed=embed)
 
@@ -141,9 +147,12 @@ class Econ(
             ]
             
             for name, value in fields:
-                embed.add_field(name=name, value=value, inline=False)
+                embed.add_field(name=name, value=value, inline=True)
 
             embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819496847990063114/829872480545013790/Timer-595b40b65ba036ed117d45fc.png")
+            
+            embed.set_footer(text=self.client.embedAuthorName, 
+                             icon_url=self.client.embedAuthorUrl)
 
             await ctx.send(embed=embed)
 
@@ -201,5 +210,8 @@ class Econ(
 
         for name, value in field:
             embed.add_field(name=name,value=value,inline=False)
+            
+        embed.set_footer(text=self.client.embedAuthorName, 
+                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
