@@ -7,20 +7,6 @@ from datetime import datetime
 from lib.bot import bot
 from functions.exceptions import NoLogChannel
 
-def getLogChannel(self, guildid : int):
-    for guild in bot.config.guilds:
-        if guild["guildID"] == str(guildid):
-            try:
-                LogChannel = self.client.get_channel(int(guild["logChannel"]))
-        
-                return LogChannel
-            except:pass
-
-def getEmbed(guildid : int, embedname : str):
-    return bot.oldConfig.embed(guildid, embedname)
-
-#make join messages
-
 class Members(Cog):
 
     def __init__(self, client):
@@ -33,12 +19,12 @@ class Members(Cog):
 
         total_users = guild.member_count
 
-        userurl = member.avatar_url
+        userurl = member.display_avatar.url
 
         embed = Embed(
             title = f'{member.name}#{member.discriminator} ({member.id}) has joined the guild, {guild.name}',
             description = member.mention,
-            colour = getEmbed(member.guild.id, "member_join")
+            colour=0x0000203F9
         )
 
         embed.set_thumbnail(url=userurl)
@@ -46,53 +32,10 @@ class Members(Cog):
         embed.add_field(name="Total Users:", value=total_users,inline=True)
 
         try:
-            channel = getLogChannel(self, guild.id)
-            await channel.send(embed=embed)
+            await (await self.client.getLogChannel(guild.id)).send(embed=embed)
 
         except:
             pass
-        
-        for guild in bot.config.guilds:
-            if guild["guildID"] == str(guild.id):
-                break
-
-        style = guild["welcomeStyle"]
-
-        if style.lower() == 'default':
-            try:
-                welcome_channel = self.client.get_channel(int(bot.config.general(member.guild.id, "welcome_channel")))
-                await welcome_channel.send(f"Everyone say hello to {member.mention}. \n Pleasure to meet you.")
-            
-            except:
-                pass
-
-        elif style.lower() == 'banner':
-            config = ConfigParser()
-            with open("./data/config.ini", "r") as f:
-                config.read(f)
-
-            headers = {
-            "Content-Type" : "application/json",
-            "Authorization" : config.get("DEFAULT", "flux_token")
-            }
-
-            data = {
-                "username" : f"{member.author.name}#{member.author.discriminator}",
-                "avatar" : str(member.author.avatar_url),
-                "background" : str(bot.config.general(member.guild.id, "welcome_background")),
-                "members" : f"Members: {member.guild.member_count}",
-                "icon" : str(bot.config.general(member.guild.id, "welcome_icon")),
-                "banner" : str(bot.config.general(member.guild.id, "welcome_banner")),
-                "color_welcome" : str(bot.config.general(member.guild.id, "welcome_text_color")),
-                "color_username" : str(bot.config.general(member.guild.id, "welcome_username_color")),
-                "color_members" : str(bot.config.general(member.guild.id, "welcome_members_color")),
-            }
-
-            r = requests.get(url="https://api.fluxpoint.dev/gen/welcome", headers=headers, json=data)
-            image = io.BytesIO(r.content)
-
-            welcome_channel = self.client.get_channel(int(bot.config.general(member.guild.id, "welcome_channel")))
-            await welcome_channel.send(file=File(image, "welcomeImage.png"))
 
     #When Player leaves message
     @Cog.listener()
@@ -100,14 +43,14 @@ class Members(Cog):
         
         guild = member.guild
 
-        channel =  getLogChannel(self, guild.id)
+        channel =  await self.client.getLogChannel(guild.id)
         
-        userurl = member.avatar_url
+        userurl = member.display_avatar.url
 
         userleft = Embed(
             title = f'{member.name}#{member.discriminator} ({member.id}) has left the guild, {guild.name}',
             description = f'{member.mention}',
-            colour = getEmbed(member.guild.id, "member_leave")
+            colour = 0x000e00101
         )
 
         userleft.set_thumbnail(url=userurl)
@@ -116,16 +59,16 @@ class Members(Cog):
 
     @Cog.listener()
     async def on_member_update(self, before, after):
-        channel = getLogChannel(self, before.guild.id)
+        channel = await self.client.getLogChannel(before.guild.id)
 
         if before.nick != after.nick:
 
             embed = Embed(
                 title = f'{before.name} changed their nickname',
                 description = f"\n**BEFORE:** {before.nick}\n\n**AFTER:** {after.nick}",
-                colour = getEmbed(before.guild.id, "member_update")
+                colour = 0x00002ee00
             )
 
-            embed.set_thumbnail(url = before.avatar_url)
+            embed.set_thumbnail(url=before.display_avatar.url)
 
             await channel.send(embed=embed)
