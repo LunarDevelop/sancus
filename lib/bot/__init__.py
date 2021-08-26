@@ -5,9 +5,6 @@ from discord import Intents
 from discord.ext.commands import Bot as BaseBot
 from discord.ext import commands
 
-from discord_components import DiscordComponents, Button, Select, SelectOption
-from discord_slash import SlashCommand
-
 # Websocket Import
 from lib.bot.websocket import *
 
@@ -47,6 +44,7 @@ class Bot(BaseBot):
         self.ready = False
         self.Version = BaseBot
         self.exceptions = exceptions
+        self.helpInstance = []
 
         # Footer elements for embeds
         self.embedAuthorUrl = "https://cdn.discordapp.com/attachments/789247201678327838/879862055404965938/stage_1629845776.jpeg"
@@ -97,8 +95,7 @@ class Bot(BaseBot):
 
 # Setup for the bot
     def setup(self):
-        # Enables slash commands for Sancus
-        self.slash_commands = SlashCommand(bot, sync_commands=True)
+        pass
 
 # COGS system to load all cogs aside from help (loaded separately)
         for cog in COGS:
@@ -158,9 +155,6 @@ class Bot(BaseBot):
         if not self.ready:
             self.ready = True
 
-            # Loads the discordComponents module
-            self.DiscordComponents = DiscordComponents(bot)
-
             for guild in self.guilds:
                 print(
                     f"{colours.PURPLE}Checking for guild during startup, {guild}{colours.ENDC}")
@@ -209,6 +203,9 @@ class Bot(BaseBot):
         ApiConnection.guild.post(newGuild)
         self.config = APIconfig()
 
+    async def on_guild_remove(self, guild):
+        "Remove left guild from api"
+        ApiConnection.guild.delete(str(guild.id))
 
 # On Message to process commands
     async def on_message(self, message):
