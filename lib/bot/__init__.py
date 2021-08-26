@@ -216,6 +216,35 @@ class Bot(BaseBot):
         if not message.author.bot:
             await self.process_commands(message)
 
+    def getGuild(self, id):
+        for guild in self.config.guilds:
+            if guild["guildID"] == str(id):
+                return guild
+
+    async def getLogChannel(self, id):
+        guild = self.getGuild(id)
+        LogChannelId = guild["logChannel"]
+        try:
+            LogChannel = (self.get_guild(id)).get_channel(
+                int(LogChannelId))
+
+            return LogChannel
+
+        except:
+            pass
+        
+    async def getActionChannel(self, id):
+        guild = self.getGuild(id)
+        ActionChannelId = guild["actionChannel"]
+        try:
+            ActionChannel = (self.get_guild(id)).get_channel(
+                int(ActionChannelId))
+
+            return ActionChannel
+
+        except:
+            pass
+
 
 # Just to run the bot class
 bot = Bot()
