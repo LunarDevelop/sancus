@@ -1,3 +1,4 @@
+from .info import Info
 import discord
 from discord.ext.commands import Cog
 
@@ -10,19 +11,17 @@ config = ConfigParser()
 with open("./data/config.ini", 'r') as configFile:
     config.read_file(configFile)
 
-from .info import Info
 
 class Meta(Info,
-            Cog):
+           Cog):
 
     def __init__(self, client):
         self.client = client
 
-
     @Cog.listener()
     async def on_ready(self):
         self.client.loop.create_task(self.presence())
-    
+
     async def presence(self):
 
         while not self.client.is_closed():
@@ -38,7 +37,4 @@ class Meta(Info,
     def get_status(self):
         self.version = config.get('DEFAULT', 'version')
 
-        return ["Default prefix is s!",  f"Version {self.version}"]
-
-    
-
+        return ["Default prefix is s!",  f"Version {self.version}", "s!info"]
