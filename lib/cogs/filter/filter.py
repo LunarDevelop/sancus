@@ -1,4 +1,5 @@
 import discord
+from discord import Embed
 from discord.ext import commands
 import requests, asyncio
 
@@ -28,4 +29,9 @@ class Filter(commands.Cog):
                         await message.delete()
                     elif type_ == 1:
                         response = requests.get("https://insult.mattbas.org/api/insult")
-                        await message.channel.send(response.text)
+                        
+                        embed = Embed(
+                            colour=0x000ff0000,
+                            description=response.text
+                        )
+                        await message.channel.send(embed=embed)
