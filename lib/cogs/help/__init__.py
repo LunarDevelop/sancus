@@ -1,5 +1,4 @@
-from .help import Help, helpButtons
+from .help import helpButtons
 
 def setup(client):
-    #client.add_cog(Help(client))
     client.add_cog(helpButtons(client))
