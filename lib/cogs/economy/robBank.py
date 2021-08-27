@@ -29,6 +29,9 @@ class robBank(commands.Cog):
                     description = f"--You have earned {amount} for you troubles.--\n--That bring you total to {bank_account} in your bank.--",
                     colour = ctx.author.colour
                     )
+                
+                embed.set_footer(text=self.client.embedAuthorName,
+                                 icon_url=self.client.embedAuthorUrl)
 
                 await ctx.send(embed=embed)
 
@@ -45,6 +48,10 @@ class robBank(commands.Cog):
                     description = f"--You have been fined {amount} from the police.--\n--That bring you total to {bank_account} in your bank.--",
                     colour = ctx.author.colour
                     )
+                
+                embed.set_footer(text=self.client.embedAuthorName,
+                                 icon_url=self.client.embedAuthorUrl)
+                
                 await ctx.send(embed=embed)
 
 
