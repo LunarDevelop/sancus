@@ -16,7 +16,7 @@ class Errors(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = Embed(
                 title = f"{str(ctx.command.name).capitalize()} | Help",
-                description = f"**Please pass all required arguments**\n\n{ctx.command.callback.__doc__}",
+                description = f"__**Please pass all required arguments**__\n{ctx.command.callback.__doc__}",
                 color = ctx.author.colour
             )
             await ctx.send(embed=embed)
@@ -30,7 +30,7 @@ class Errors(commands.Cog):
         elif isinstance(error, commands.TooManyArguments):
             embed = Embed(
                 title = f"{str(ctx.command.name).capitalize()} | Help",
-                description = f"**You have given too many arguments for this command**\n\n{ctx.command.callback.__doc__}",
+                description = f"__**You have given too many arguments for this command**__\n{ctx.command.callback.__doc__}",
                 color = ctx.author.colour
             )
             await ctx.send(embed=embed)
@@ -58,18 +58,4 @@ class Errors(commands.Cog):
 
         elif isinstance(error, commands.NSFWChannelRequired):
             await ctx.send("This command requires an NSFW channel to be able to run")
-            
-    #@bot.event
-    async def on_error(self,error):
-        string = ""
-        errors = sys.stderr.write(string)
-        channel = bot.get_channel(857978876230369281)
-        await sleep(1)
-        
-        if errors != 0:           
-            await channel.send(errors,"\n",)
-        await channel.send(error.__dict__)
-        await sleep(1)
-            
-        await channel.send("ERROR!!!")
-        await sleep(1)
+     
