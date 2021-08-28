@@ -154,6 +154,7 @@ class Bot(BaseBot):
         # Just doubles checks if bot is ready
         if not self.ready:
             self.ready = True
+            self.emojis()
 
             for guild in self.guilds:
                 print(
@@ -215,6 +216,17 @@ class Bot(BaseBot):
         # If message is not by a bot then process command (if it is a command)
         if not message.author.bot:
             await self.process_commands(message)
+
+    def clientColour(self):
+        self.react_colour = 0x000a8329e
+
+    def emojis(self):
+        self.addEmoji = self.get_emoji(873303876466528286)
+        self.deleteEmoji = self.get_emoji(873303905008779266)
+        self.adjustEmoji = self.get_emoji(873304038022713415)
+
+        self.tickEmoji = self.get_emoji(872992713165926503)
+        self.crossEmoji = self.get_emoji(872992645302075392)
 
     def getGuild(self, id):
         for guild in self.config.guilds:
