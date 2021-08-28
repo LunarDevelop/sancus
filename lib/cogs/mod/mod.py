@@ -13,13 +13,11 @@ from time import sleep
 from lib.bot import bot
 
 from .settings import Settings
-from .roles import Roles
 from .react import reactButtons
 
 
 class Mod(
     Settings,
-    Roles,
     # reactButtons,
         Cog):
 
