@@ -21,6 +21,7 @@ from glob import glob
 from configparser import ConfigParser, NoSectionError, NoOptionError
 import schedule
 import time
+import string
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("lib/cogs/**/*.py")]
 PREFIX = 's!'
@@ -244,7 +245,7 @@ class Bot(BaseBot):
 
         except:
             pass
-        
+
     async def getActionChannel(self, id):
         guild = self.getGuild(id)
         ActionChannelId = guild["actionChannel"]
@@ -256,6 +257,11 @@ class Bot(BaseBot):
 
         except:
             pass
+
+    def is_hex(self, value):
+        hex_string = set(string.hexdigits())
+
+        return all(char in hex_string for char in value)
 
 
 # Just to run the bot class
