@@ -20,7 +20,6 @@ class Logging(
     async def on_raw_message_edit(self, payload):
         """Logs edited message to log channel of the guild
         """
-    
 
         before = payload.cached_message
         after = await (await (await self.client.fetch_guild(payload.guild_id)).fetch_channel(payload.channel_id)).fetch_message(payload.message_id)
@@ -46,12 +45,14 @@ class Logging(
 
                 for name, value, inline, in fields:
                     embed.add_field(name=name, value=value, inline=inline)
-                    
+
                 embed.set_footer(text=self.client.embedAuthorName,
                                  icon_url=self.client.embedAuthorUrl)
-                
-                try:await Log_Channel.send(embed=embed)
-                except:pass
+
+                try:
+                    await Log_Channel.send(embed=embed)
+                except:
+                    pass
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
@@ -62,8 +63,11 @@ class Logging(
 
         if not message.author.bot:
 
+            if message.content in self.client.all_commands:
+                return
+
             try:
-                Log_Channel = self.client.getLogChannel(payload.guild_id)
+                Log_Channel = await self.client.getLogChannel(payload.guild_id)
 
                 embed = discord.Embed(
                     title=f"Message deleted by {message.author.name}#{message.author.discriminator}",
@@ -72,7 +76,7 @@ class Logging(
                     timestamp=datetime.utcnow()
                 )
 
-                embed.set_thumbnail(url=message.author.avatar_url)
+                embed.set_thumbnail(url=message.author.display_avatar.url)
 
                 fields = [
                     ("Content:", message.content, False)
@@ -80,7 +84,7 @@ class Logging(
 
                 for name, value, inline, in fields:
                     embed.add_field(name=name, value=value, inline=inline)
-                    
+
                 embed.set_footer(text=self.client.embedAuthorName,
                                  icon_url=self.client.embedAuthorUrl)
 
@@ -91,7 +95,7 @@ class Logging(
     @commands.Cog.listener()
     async def on_raw_bulk_message_delete(self, payload):
         logChannel = self.getLogChannel(payload.guild_id)
-        
+
         if logChannel != None:
             if payload.cached_messages[0]:
                 embed = discord.Embed(
@@ -110,7 +114,7 @@ class Logging(
 
                 for name, value, inline, in fields:
                     embed.add_field(name=name, value=value, inline=inline)
-                    
+
                 embed.set_footer(text=self.client.embedAuthorName,
                                  icon_url=self.client.embedAuthorUrl)
 

@@ -5,6 +5,7 @@ import requests
 import json
 import asyncio
 
+
 class Polls(commands.Cog):
 
     def __init__(self, client):
@@ -16,7 +17,7 @@ class Polls(commands.Cog):
 
         apiKey = "UZ29S6O8HFCWA9BJSCKSK7UUD93SC3RF"
 
-        headers = {'API-KEY':apiKey}
+        headers = {'API-KEY': apiKey}
 
         poll = requests.post(url, json=data, headers=headers).json()
 
@@ -46,7 +47,7 @@ class Polls(commands.Cog):
         while True:
             while titleC != True:
                 try:
-                    title = await self.client.wait_for("message", timeout= 90.0)
+                    title = await self.client.wait_for("message", timeout=90.0)
                     if title.author.id == ctx.author.id:
                         titleM = title.content
 
@@ -57,11 +58,11 @@ class Polls(commands.Cog):
                 except asyncio.TimeoutError:
                     await ctx.send("Timed out. Try again")
                     return
-            
-            await ctx.send("Please enter the question or topic.")
+
+            await ctx.send("Please enter the answers seperate by `,`")
             while answersC != True:
                 try:
-                    answers = await self.client.wait_for("message", timeout= 90.0)
+                    answers = await self.client.wait_for("message", timeout=90.0)
                     if answers.author.id == ctx.author.id:
                         answers = answers.content
 
@@ -80,15 +81,14 @@ class Polls(commands.Cog):
             while maC != True:
 
                 try:
-                    ma = await self.client.wait_for("message", timeout= 90.0)
+                    ma = await self.client.wait_for("message", timeout=90.0)
                     if ma.author.id == ctx.author.id:
                         ma = ma.content
-                        ma = ma.capitalize() 
+                        ma = ma.capitalize()
 
                         await ctx.send(f"Your answers are : {ma}")
                         maC = True
                         break
-
 
                 except asyncio.TimeoutError:
                     await ctx.send("Timed out. Try again")
@@ -96,24 +96,19 @@ class Polls(commands.Cog):
 
             if titleC and answersC and maC:
                 break
-        
-        data={
+
+        data = {
             "poll": {
                 "title": titleM,
                 "answers": answersList,
                 "ma": ma
             }
-            }
+        }
 
         contents = (self.createPoll(data))
 
         id_ = contents['content_id']
 
-        link = "https://strawpoll.com/"+ id_
+        link = "https://strawpoll.com/" + id_
 
         await ctx.send(f"Here is the link to your straw poll: \n{link}")
-        
-
-
-
-          

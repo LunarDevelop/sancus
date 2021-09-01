@@ -66,7 +66,7 @@ class Members(Cog):
 
         await channel.send(embed=userleft)
 
-    #If nickname changes
+    # If nickname changes
     @Cog.listener()
     async def on_member_update(self, before, after):
         channel = await self.client.getLogChannel(before.guild.id)

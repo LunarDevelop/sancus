@@ -5,19 +5,20 @@ from discord.ext import commands
 
 from lib.bot import bot
 
+
 class Errors(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        
+
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        
+
         if isinstance(error, commands.MissingRequiredArgument):
             embed = Embed(
-                title = f"{str(ctx.command.name).capitalize()} | Help",
-                description = f"__**Please pass all required arguments**__\n{ctx.command.callback.__doc__}",
-                color = ctx.author.colour
+                title=f"{str(ctx.command.name).capitalize()} | Help",
+                description=f"__**Please pass all required arguments**__\n{ctx.command.callback.__doc__}",
+                color=ctx.author.colour
             )
             await ctx.send(embed=embed)
 
@@ -29,14 +30,14 @@ class Errors(commands.Cog):
 
         elif isinstance(error, commands.TooManyArguments):
             embed = Embed(
-                title = f"{str(ctx.command.name).capitalize()} | Help",
-                description = f"__**You have given too many arguments for this command**__\n{ctx.command.callback.__doc__}",
-                color = ctx.author.colour
+                title=f"{str(ctx.command.name).capitalize()} | Help",
+                description=f"__**You have given too many arguments for this command**__\n{ctx.command.callback.__doc__}",
+                color=ctx.author.colour
             )
             await ctx.send(embed=embed)
 
         elif isinstance(error, commands.CommandOnCooldown):
-            
+
             m, s = divmod(error.retry_after, 60)
             h, m = divmod(m, 60)
 
@@ -49,13 +50,12 @@ class Errors(commands.Cog):
 
             elif m > 0:
                 await ctx.send(f'This command has a cooldown, please wait another `{m}` minutes and `{s}` second/s before trying again.')
-            
+
             elif m == 0:
                 await ctx.send(f'This command has a cooldown, please wait another `{s}` seconds before trying again.')
-        
+
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send('You do not have the permissions to use this command')
 
         elif isinstance(error, commands.NSFWChannelRequired):
             await ctx.send("This command requires an NSFW channel to be able to run")
-     
