@@ -6,12 +6,12 @@ from lib.bot import bot
 
 
 def open_econ():
-    with open("./data/econ.json") as f:
+    with open("sancus/data/econ.json") as f:
         return json.load(f)
 
 
 def save_econ(data):
-    with open("./data/econ.json", 'w') as f:
+    with open("sancus/data/econ.json", 'w') as f:
         json.dump(data, f, indent=4)
 
 

@@ -2,7 +2,7 @@ from discord import Embed
 import datetime
 from typing import TypeVar, Union, Any
 from discord import Embed, colour
-from discord.types.embed import EmbedType
+
 from discord.embeds import EmptyEmbed, _EmptyEmbed
 from discord.colour import Colour
 
@@ -17,7 +17,7 @@ class Embeds(Embed):
                  colour: Union[int, Colour, _EmptyEmbed] = EmptyEmbed,
                  color: Union[int, Colour, _EmptyEmbed] = EmptyEmbed,
                  title: MaybeEmpty[Any] = EmptyEmbed,
-                 type: EmbedType = EmptyEmbed,
+                 type = EmptyEmbed,
                  url: MaybeEmpty[Any] = EmptyEmbed,
                  description: MaybeEmpty[Any] = EmptyEmbed
                  ):

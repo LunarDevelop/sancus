@@ -30,7 +30,7 @@ COGS = [path.split("\\")[-1][:-3] for path in glob("lib/cogs/**/*.py")]
 
 Config = ConfigParser()
 
-with open("./data/config.ini", 'r') as f:
+with open("sancus/data/config.ini", 'r') as f:
     Config.read_file(f)
 
 cogsList = Config.get('DEFAULT', 'COGS')
@@ -42,7 +42,7 @@ cogsList = cogsList.split(" , ")
 
 class Owner(
         Mail,
-        #admin_slash,
+        admin_slash,
         Cog
 ):
 
@@ -54,7 +54,7 @@ class Owner(
 
         self.Config = ConfigParser()
 
-        with open("./data/config.ini", 'r') as configFile:
+        with open("sancus/data/config.ini", 'r') as configFile:
 
             self.Config.read_file(configFile)
 
@@ -199,7 +199,7 @@ class Owner(
 # Commands
     # @Cog.listener()
     async def on_command(self, ctx):
-        with open("./data/config.ini", 'r') as configFile:
+        with open("sancus/data/config.ini", 'r') as configFile:
             Config.read_file(configFile)
 
         if Config.getboolean('DEFAULT', "maintenance_mode"):
@@ -225,13 +225,13 @@ class Owner(
 
     @_set.command()
     async def maintenance(self, ctx, toggle):
-        with open("./data/config.ini", 'r') as configFile:
+        with open("sancus/data/config.ini", 'r') as configFile:
 
             Config.read_file(configFile)
 
         Config.set('DEFAULT', 'maintenance_mode', toggle)
 
-        with open("./data/config.ini", 'w') as configFile:
+        with open("sancus/data/config.ini", 'w') as configFile:
             Config.write(configFile)
 
         await ctx.send("Maintenance Mode has changed.")

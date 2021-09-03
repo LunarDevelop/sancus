@@ -15,10 +15,10 @@ class config():
         self.config_ = ConfigParser()
         self.USERFile = ConfigParser()
 
-        with open("./data/config.ini", 'r') as f:
+        with open("sancus/data/config.ini", 'r') as f:
             self.config_.read_file(f)
 
-        with open("./data/users.ini", 'r') as userfile:
+        with open("sancus/data/users.ini", 'r') as userfile:
             self.USERFile.read_file(userfile)
 
         "SETTING THE DEFAULT SETTINGS"
@@ -92,7 +92,7 @@ class config():
         self.save()
 
     def get_all(self):
-        with open("./data/config.ini", 'r') as f:
+        with open("sancus/data/config.ini", 'r') as f:
             self.config_.read_file(f)
 
         for section in self.config_.sections():
@@ -110,7 +110,7 @@ class config():
                         self.TIMEOUTS[section[:-9]
                                       ][option] = self.config_.get(section, option)
 
-        with open("./data/users.ini", 'r') as usersINI:
+        with open("sancus/data/users.ini", 'r') as usersINI:
             self.USERFile.read_file(usersINI)
 
             for user in self.USERFile.sections():
@@ -118,7 +118,7 @@ class config():
                 for option in self.USERFile.options(user):
                     self.USERS[user][option] = self.USERFile.get(user, option)
 
-        with open("./data/reactions.json", "r") as reactionFile:
+        with open("sancus/data/reactions.json", "r") as reactionFile:
             self.REACTIONS = json.load(reactionFile)
 
     def save(self):
@@ -160,13 +160,13 @@ class config():
                     self.USERFile.set(section, key, str(
                         self.USERS[section].get(key)))
 
-        with open("./data/config.ini", 'w') as f:
+        with open("sancus/data/config.ini", 'w') as f:
             self.config_.write(f)
 
-        with open("./data/users.ini", 'w') as userFile:
+        with open("sancus/data/users.ini", 'w') as userFile:
             self.USERFile.write(userFile)
 
-        with open("./data/reactionFile", 'w') as reactionFile:
+        with open("sancus/data/reactionFile", 'w') as reactionFile:
             json.dump(self.REACTIONS, reactionFile, indent=4)
 
     def embed(self, section, option):
@@ -232,7 +232,7 @@ class config():
         Adding commands to the data
         """
 
-        with open("./data/commands.json") as f:
+        with open("sancus/data/commands.json") as f:
             data = json.load(f)
 
         commandsList = []
@@ -259,7 +259,7 @@ class config():
         commands = ""
         guilds = ""
 
-        with open("./data/commands.json") as f:
+        with open("sancus/data/commands.json") as f:
             data = json.load(f)
 
         for commands in data['commands']:
@@ -285,7 +285,7 @@ class config():
         return True
 
     def disable_command_roles(command, guildID: discord.Guild.id, role):
-        with open("./data/commands.json") as f:
+        with open("sancus/data/commands.json") as f:
             data = json.load(f)
 
         for commands in data['commands']:
@@ -313,7 +313,7 @@ class config():
         saving_config._savingCommands(data)
 
     def enable_command_roles(command, guildID: discord.Guild.id, role):
-        with open("./data/commands.json") as f:
+        with open("sancus/data/commands.json") as f:
             data = json.load(f)
 
         for commands in data['commands']:
@@ -341,7 +341,7 @@ class config():
         saving_config._savingCommands(data)
 
     def disable_command_Users(command, guildID: discord.Guild.id, userID):
-        with open("./data/commands.json") as f:
+        with open("sancus/data/commands.json") as f:
             data = json.load(f)
 
         for commands in data['commands']:
@@ -369,7 +369,7 @@ class config():
         saving_config._savingCommands(data)
 
     def enable_command_Users(command, guildID: discord.Guild.id, userID):
-        with open("./data/commands.json") as f:
+        with open("sancus/data/commands.json") as f:
             data = json.load(f)
 
         for commands in data['commands']:

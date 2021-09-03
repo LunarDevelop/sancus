@@ -4,23 +4,13 @@ from glob import glob
 from discord import Embed
 from discord.ext.commands import Cog, command, group, is_owner
 
+from discord_slash import cog_ext, SlashContext
+
 import asyncio
 import datetime
 import sys
 
 #from tinker.ext.apps import *
-
-
-COGS = [path.split("\\")[-1][:-3] for path in glob("lib/cogs/**/*.py")]
-
-Config = ConfigParser()
-
-with open("./data/config.ini", 'r') as f:
-    Config.read_file(f)
-
-cogsList = Config.get('DEFAULT', 'COGS')
-cogsList = cogsList.strip("[] ,")
-cogsList = cogsList.split(" , ")
 
 
 class admin_slash(Cog):
@@ -31,3 +21,7 @@ class admin_slash(Cog):
     @Cog.listener()
     async def on_interaction(self, payload):
         print(payload)
+
+    @cog_ext.cog_slash(name="test", guild_ids=[780211278614364160])
+    async def _test(self,ctx):
+        await ctx.send("ping, pong")

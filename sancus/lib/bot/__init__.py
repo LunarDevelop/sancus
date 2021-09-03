@@ -5,6 +5,8 @@ from discord import Intents
 from discord.ext.commands import Bot as BaseBot
 from discord.ext import commands
 
+from discord_slash import SlashCommand, SlashContext
+
 # Websocket Import
 from lib.bot.websocket import *
 
@@ -23,14 +25,14 @@ import schedule
 import time
 import string
 
-COGS = [path.split("\\")[-1][:-3] for path in glob("lib/cogs/**/*.py")]
+COGS = [path.split("\\")[-1][:-3] for path in glob("sancus/lib/cogs/**/*.py")]
 PREFIX = 's!'
 OWNER_IDS = [268035643760836608, 801557845928706139]
 TESTING_MODE = True
 
 __Config__ = ConfigParser()
 
-with open("./data/config.ini", "r") as f:
+with open("sancus/data/config.ini", "r") as f:
     __Config__.read_file(f)
 
 
@@ -86,6 +88,7 @@ class Bot(BaseBot):
 # RUN function for the bot
     def run(self, version):
         self.Version = version
+        slash = SlashCommand(self)
 
         print(f"{colours.GREEN}STARTING SETUP...{colours.ENDC}")
         self.setup()

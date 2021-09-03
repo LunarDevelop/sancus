@@ -8,7 +8,7 @@ from asyncio import sleep
 from configparser import ConfigParser
 
 config = ConfigParser()
-with open("./data/config.ini", 'r') as configFile:
+with open("sancus/data/config.ini", 'r') as configFile:
     config.read_file(configFile)
 
 
@@ -25,6 +25,8 @@ class Meta(Info,
     async def presence(self):
 
         while not self.client.is_closed():
+            
+            self.version = config.get('DEFAULT', 'version')
 
             _status = self.get_status()
 
@@ -35,6 +37,5 @@ class Meta(Info,
             await sleep(10)
 
     def get_status(self):
-        self.version = config.get('DEFAULT', 'version')
 
         return ["Default prefix is s!",  f"Version {self.version}", "s!info"]

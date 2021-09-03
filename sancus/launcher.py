@@ -7,7 +7,7 @@ from functions.consoleColours import *
 
 ###Getting Version
 config = configparser.ConfigParser()
-with open("./data/config.ini", 'r') as configFile:
+with open("sancus/data/config.ini", 'r') as configFile:
     config.read_file(configFile)
 Version = config.get("DEFAULT", "version")
 
