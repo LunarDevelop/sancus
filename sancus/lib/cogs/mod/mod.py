@@ -13,12 +13,12 @@ from time import sleep
 from lib.bot import bot
 
 from .settings import Settings
-from .react import reactButtons
+from .react import reaction
 
 
 class Mod(
     Settings,
-    # reactButtons,
+    reaction,
         Cog):
 
     def __init__(self, client):
@@ -27,9 +27,7 @@ class Mod(
     @command()
     @has_permissions(manage_permissions=True)
     async def clear(self, ctx, amount=5):
-        """
-            Clears a set of messages.
-        """
+        """Clears a set of using the amount to say how many will be removed"""
 
         await ctx.channel.purge(limit=amount, bulk=True)
         await ctx.send("Clearing is done!!", delete_after=1)
@@ -137,6 +135,7 @@ class Mod(
 
             except:
                 await ctx.send("There has been and error with the command!\nEnsure that the person you are trying to ban does not have a role above the bot, and try again.")
+                return False
 
             try:
                 channel = await self.client.getActionChannel(ctx.guild.id)
@@ -144,9 +143,12 @@ class Mod(
 
             except:
                 pass
+            return True
+
 
         else:
             await ctx.send("You cannot ban this user!")
+            return False
 
     @command()
     @has_permissions(ban_members=True)
@@ -289,7 +291,7 @@ class Mod(
         )
 
         embed.set_footer(text=self.client.embedAuthorName,
-                          icon_url=self.client.embedAuthorUrl)
+                         icon_url=self.client.embedAuthorUrl)
 
         try:
             channel = await self.client.getActionChannel(ctx.guild.id)

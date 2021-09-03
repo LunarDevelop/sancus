@@ -1,12 +1,13 @@
 import asyncio
 from asyncio.tasks import sleep
 from datetime import datetime
+from discord.client import Client
 
 from discord.enums import ButtonStyle
 from lib import bot
 
 from functions.apiConnection import APIconfig, ApiConnection
-from functions.objects import guildObject
+from functions.objects import guildObject, Embeds
 
 import discord
 from discord import Embed
@@ -20,7 +21,7 @@ from configparser import ConfigParser
 from discord.ext.commands import command, is_owner, Cog, group
 
 from .mail import Mail
-#from .admin_slash import admin_slash
+from .admin_slash import admin_slash
 
 from lib.bot import Bot
 
@@ -41,12 +42,12 @@ cogsList = cogsList.split(" , ")
 
 class Owner(
         Mail,
-        # admin_slash,
+        #admin_slash,
         Cog
 ):
 
     def __init__(self, client):
-        self.client = client
+        self.client : Client = client
 
         self.back_arrow = self.client.get_emoji(880261491587166229)
         self.forward_arrow = self.client.get_emoji(880261496167358484)
@@ -56,6 +57,18 @@ class Owner(
         with open("./data/config.ini", 'r') as configFile:
 
             self.Config.read_file(configFile)
+
+    @Cog.listener()
+    async def on_interaction(self, payload):
+        print(payload.data)
+
+    @command()
+    async def test(self, ctx):
+        reaction, user = await self.client.wait_for("reaction_add")
+        await ctx.send(embed=Embed(
+            description=f"{reaction.emoji}",
+            colour=0x000+int("02af02", 16)
+        ))
 
 # Guilds
     @Cog.listener()
@@ -125,7 +138,7 @@ class Owner(
         def chunker_list(seq, size):
             return (seq[i::size] for i in range(size))
 
-        class page(discord.ui.View):
+        """class page(discord.ui.View):
 
             def __init__(self):
                 super.__init__()
@@ -181,7 +194,7 @@ class Owner(
                 embed.add_field(
                     name=servers[i], value=serverIDS[i], inline=True)
 
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed)"""
 
 # Commands
     # @Cog.listener()

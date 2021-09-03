@@ -16,3 +16,4 @@ class antispam(Cog):
         
         if len(mentionList) > 5:
             await msg.delete()
+    
