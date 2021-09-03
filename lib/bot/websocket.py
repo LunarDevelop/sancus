@@ -4,7 +4,8 @@ import json
 
 from functions.consoleColours import *
 
-uri = "ws://localhost:8765"
+uri = "ws://websocket.link:8765"
+botName = "sancus"
 
 
 async def startWebsocketConnection():
@@ -14,13 +15,13 @@ async def startWebsocketConnection():
         await ping()
         await uptime()
     except:
-        print(f"{colours.DARK_GREY}Failed to connect to websocket{colours.ENDC}")
+        pass
 
 async def uptime():
     data = {
         "type": "09",
         "data": {
-            "botName": "sancus"
+            "botName": botName
         }
     }
 
@@ -29,10 +30,8 @@ async def uptime():
         message = json.dumps(data)
 
         await websocket.send(str(message))
-        print(f"{colours.DARK_GREY}> {message}{colours.ENDC}")
 
         greeting = await websocket.recv()
-        print(f"{colours.DARK_GREY}< {greeting}{colours.ENDC}")
 
 
 async def ping():
@@ -40,17 +39,15 @@ async def ping():
         pinging = {
             "type": "01",
             "data": {
-                "botName": "sancus"
+                "botName": botName
             }
         }
 
         pinging = json.dumps(pinging)
 
         await websocket.send(str(pinging))
-        print(f"{colours.DARK_GREY}> {pinging}{colours.ENDC}")
 
         greeting = await websocket.recv()
-        print(f"{colours.DARK_GREY}< {greeting}{colours.ENDC}")
 
 
 async def heartbeat(client):
