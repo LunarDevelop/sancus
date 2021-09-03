@@ -86,6 +86,7 @@ class reaction(Cog):
             react_role_link: Optional[list[Role]] = None
 
             # Reaction Message info
+            react_name = None
             react_message_types = ["PreMade", "Custom"]
             react_message_type = None
             react_message_id = None
@@ -96,6 +97,7 @@ class reaction(Cog):
             react_embed_content = None
             react_embed_colour = None
             react_embed = EmptyEmbed
+            react_role_list_final = []
 
             # React
             react_emoji_list = None
@@ -104,8 +106,10 @@ class reaction(Cog):
             react_button_content: Optional[list[str]] = None
             react_button_colour: Optional[list[str]] = None
             react_button_colour_instance: Optional[str] = None
+            react_button_ids : Optional[list[int]]= []
             react_select_objects: Optional[list[SelectOption]] = None
             react_select_title: Optional[list[str]] = None
+            react_select_ids : Optional[list[int]] = []]
 
             # Misc
             react_channel = None
@@ -114,8 +118,13 @@ class reaction(Cog):
             react_type_embed = ReactionEmbed(
                 title="What embed type would you like?",
                 description="""**Button** : A simple button like you see below with an emoji if you wish\n 
-                **Select** : A dropdown menu where you can select muilple role or just one\n
+                **Select** : A dropdown menu where you can select multiple role or just one\n
                 **Emojis** : The old fashion way of just using different emojis for different roles"""
+            )
+            
+            react_name_embed = ReactionEmbed(
+                title="What would you like it to be called?",
+                description="This is solely so you can access it later, to modify or remove it."
             )
 
             react_message_type_embed = ReactionEmbed(
@@ -366,14 +375,22 @@ class reaction(Cog):
         # Start
 
         # Order of action
+        # Name
         # Type
         # Channel
         # Message type (premade or custom)
         # Content or Embed / or message id
-        # Message Content or Embed title/decription/colour
+        # Message Content or Embed title/description/colour
         # Roles
         # Emoji or Buttons or Selects
         # Roles -> Option
+
+            # Name
+            await msg.edit(embed=react_name_embed, view=None)
+            
+            message = await self.client.wait_for("message", check=lambda i: i.user.id == ctx.author.id)
+            
+            react_name = message.content()
 
             # Type Selection
             await msg.edit(embed=react_type_embed, view=react_type_buttons())
@@ -531,7 +548,7 @@ class reaction(Cog):
 
                 # Colours
             if react_type == "button" and react_button_content != None:
-
+                react_button_ids = 0
                 for button in react_button_content:
                     await msg.edit(embed=react_button_colour_embed, view=react_button_colour_buttons)
 
@@ -542,6 +559,8 @@ class reaction(Cog):
                         interactionObject.data["custom_id"])
 
                     react_button_list:list[Button]
+                    react_button_ids += 1
+                    
                     react_button_list.append(
                         Button(
                             label=react_button_content,
@@ -564,6 +583,9 @@ class reaction(Cog):
                     ",")
 
             # Roles -> Option
+            
+                    # React gets saved to a list in the order of the emoji/interaction list
+                    # So just need to match the two list up to find the role needed
 
                 # Emojis
 
@@ -637,10 +659,25 @@ class reaction(Cog):
                     react_role_link_embed.remove_field(0)
 
             # Finishing up
-            
+
             FinishedData : dict = {
-                
+                "name": react_name,
+                "data": {
+                    "guildId" : ctx.guild.id,
+                    "messageId" : react_message_id,
+                    "emojis" : react_emoji_list,
+                    "buttonsIds" : react_button_ids,
+                    "selectIds" : react_select_ids,
+                    "roles" : react_role_list_final
+                }
             }
+
+            file = open("sancus/data/reaction", "r")
+            data : list[dict] = json.load(file)
+            data.append(FinishedData)
+
+            json.dump(data,file, indent=4)
+            return True
 
         def remove():
             pass
