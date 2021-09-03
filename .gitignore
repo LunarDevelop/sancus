@@ -15,3 +15,6 @@ discord.log
 data/econ.json
 data/botData.json
 data/config.ini
+TempRemoved.py
+testing.py
+data/users.ini
