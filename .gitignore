@@ -9,9 +9,12 @@
 .vscode/launch.json
 .vscode/settings.json
 test.py
-data/anime.json
-data/config.ini
+sancus/data/anime.json
+sancus/data/config.ini
 discord.log
-data/econ.json
-data/botData.json
-data/config.ini
+sancus/data/econ.json
+sancus/data/botData.json
+sancus/data/config.ini
+TempRemoved.py
+testing.py
+sancus/data/users.ini
