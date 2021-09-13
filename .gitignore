@@ -1,20 +1,9 @@
 *.pyc
-.idea/misc.xml
-.idea/modules.xml
-.idea/Sancus Testing.iml
-.idea/vcs.xml
-.idea/workspace.xml
-.idea/inspectionProfiles/profiles_settings.xml
-.vs/ProjectSettings.json
-.vscode/launch.json
-.vscode/settings.json
+.idea/
+.vs/
+.vscode/
 test.py
-sancus/data/anime.json
-sancus/data/config.ini
 discord.log
-sancus/data/econ.json
-sancus/data/botData.json
-sancus/data/config.ini
+sancus/data/
 TempRemoved.py
 testing.py
-sancus/data/users.ini
