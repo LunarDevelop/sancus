@@ -21,7 +21,6 @@ from configparser import ConfigParser
 from discord.ext.commands import command, is_owner, Cog, group
 
 from .mail import Mail
-from .admin_slash import admin_slash
 
 from lib.bot import Bot
 
@@ -42,7 +41,6 @@ cogsList = cogsList.split(" , ")
 
 class Owner(
         Mail,
-        admin_slash,
         Cog
 ):
 

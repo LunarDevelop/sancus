@@ -21,7 +21,3 @@ class admin_slash(Cog):
     @Cog.listener()
     async def on_interaction(self, payload):
         print(payload)
-
-    @cog_ext.cog_slash(name="test", guild_ids=[780211278614364160])
-    async def _test(self,ctx):
-        await ctx.send("ping, pong")

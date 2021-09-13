@@ -88,7 +88,6 @@ class Bot(BaseBot):
 # RUN function for the bot
     def run(self, version):
         self.Version = version
-        slash = SlashCommand(self)
 
         print(f"{colours.GREEN}STARTING SETUP...{colours.ENDC}")
         self.setup()
@@ -100,7 +99,6 @@ class Bot(BaseBot):
 # Setup for the bot
     def setup(self):
         pass
-
 # COGS system to load all cogs aside from help (loaded separately)
         for cog in COGS:
             cogs = [cog.split("/")[-1]]
