@@ -89,7 +89,7 @@ class connectionDb():
     def post_config_guild(self, guild: guildObject):
         uri = self.uri+f"/{api_version}/sancus/guilds"
         r = requests.post(uri, headers=self.headers,
-                          json=json.dumps(guild.__dict__))
+                          json=guild.__dict__)
         if r.status_code == 200:
             return r.json()["Content"]
         else:
@@ -98,7 +98,7 @@ class connectionDb():
     def post_config_user(self, user: userObject):
         uri = self.uri+f"/{api_version}/sancus/users"
         r = requests.post(uri, headers=self.headers,
-                          json=json.dumps(user.__dict__))
+                          json=user.__dict__)
         if r.status_code == 200:
             return r.json()["Content"]
         else:
@@ -107,7 +107,7 @@ class connectionDb():
     def post_config_react(self, react: reactObject):
         uri = self.uri+f"/{api_version}/sancus/reacts"
         r = requests.post(uri, headers=self.headers,
-                          json=json.dumps(react.__dict__))
+                          json=react.__dict__)
         if r.status_code == 200:
             return r.json()["Content"]
         else:
