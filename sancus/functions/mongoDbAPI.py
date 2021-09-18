@@ -4,7 +4,7 @@ from functions.objects import guildObject, userObject, reactObject
 import requests
 import json
 
-api_ini = "data/api.ini"
+api_ini = "sancus/data/api.ini"
 api_version = "v1"
 
 
@@ -16,7 +16,7 @@ class connectionDb():
             api_data.read_file(f)
 
         self.uri = api_data["DEFAULT"]["uri"]
-        self.headers = {"Authoization": api_data["DEFAULT"]["auth"]}
+        self.headers = {"Authorization": api_data["DEFAULT"]["auth"]}
 
     # GET methods
 
@@ -25,63 +25,63 @@ class connectionDb():
         uri = self.uri+f"/{api_version}/sancus/guilds/{id}"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
         # GET list of all guilds
     def get_config_guilds(self):
         uri = self.uri+f"/{api_version}/sancus/guilds"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
         # GET a single user
     def get_config_user(self, id):
         uri = self.uri+f"/{api_version}/sancus/users/{id}"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
         # GET list of all Users
     def get_config_users(self):
         uri = self.uri+f"/{api_version}/sancus/users"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
         # GET a single reacts
     def get_config_react(self, id):
         uri = self.uri+f"/{api_version}/sancus/reacts/{id}"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
         # GET list of all reacts
     def get_config_reacts(self):
         uri = self.uri+f"/{api_version}/sancus/reacts"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
         # GET config
     def get_config_config(self):
         uri = self.uri+f"/{api_version}/sancus/config"
         r = requests.get(uri, headers=self.headers)
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
     # POST Methods
 
@@ -91,27 +91,27 @@ class connectionDb():
         r = requests.post(uri, headers=self.headers,
                           json=json.dumps(guild.__dict__))
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
-        
+            return None
+
     def post_config_user(self, user: userObject):
         uri = self.uri+f"/{api_version}/sancus/users"
         r = requests.post(uri, headers=self.headers,
                           json=json.dumps(user.__dict__))
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
-        
-    def post_config_guild(self, react: reactObject):
+            return None
+
+    def post_config_react(self, react: reactObject):
         uri = self.uri+f"/{api_version}/sancus/reacts"
         r = requests.post(uri, headers=self.headers,
                           json=json.dumps(react.__dict__))
         if r.status_code == 200:
-            return r.json()
+            return r.json()["Content"]
         else:
-            return "THERE has been an error"
+            return None
 
     # PUT Methods
 
@@ -125,8 +125,8 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
-        
+            return None
+
     def put_config_user(self, id, input):
         uri = self.uri+f"/{api_version}/sancus/users"
         data = {"id": id, "input": input}
@@ -136,8 +136,8 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
-        
+            return None
+
     def put_config_react(self, id, name, input):
         uri = self.uri+f"/{api_version}/sancus/reacts"
         data = {"id": id, "name": name, "input": input}
@@ -147,10 +147,10 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
+            return None
 
         # PUT config
-    
+
     def put_config_config(self, input):
         uri = self.uri+f"/{api_version}/sancus/guilds"
         data = {"id": 0, "input": input}
@@ -160,7 +160,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
+            return None
 
     # DELETE Methods
 
@@ -174,8 +174,8 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
-        
+            return None
+
     def delete_config_user(self, id):
         uri = self.uri+f"/{api_version}/sancus/users"
         data = {"id": id}
@@ -185,8 +185,8 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
-        
+            return None
+
     def delete_config_react(self, id, name):
         uri = self.uri+f"/{api_version}/sancus/reacts"
         data = {"id": id, "name": name}
@@ -196,4 +196,4 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
-            return "THERE has been an error"
+            return None
