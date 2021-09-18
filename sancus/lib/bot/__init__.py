@@ -5,18 +5,14 @@ from discord import Intents
 from discord.ext.commands import Bot as BaseBot
 from discord.ext import commands
 
-from discord_slash import SlashCommand, SlashContext
-
 # Websocket Import
 from lib.bot.websocket import *
 
 # functions imports
-from functions.apiConnection import APIconfig, ApiConnection
+from functions.mongoDbAPI import connectionDb
 from functions.consoleColours import colours
 import functions.exceptions as exceptions
 from functions.objects import *
-# This is temporary while I add stuff to the api
-from functions.config import config
 
 # general imports
 from glob import glob
@@ -60,17 +56,17 @@ class Bot(BaseBot):
         intents = Intents.all()
 
         # Ensuring config classes are set
-        self.config = APIconfig()
-        self.oldConfig = config()
+        self.config = connectionDb()
+        self.guild_ = self.config.get_config_guilds()
+        self.users_ = self.config.get_config_users()
+        self.reacts_ = self.config.get_config_reacts()
 
         # Find and return prefix for request guilf via message object
         def get_prefix(self, message):
             try:
-                for guild in self.config.guilds:
-                    if guild["guildID"] == str(message.guild.id):
-                        return str(guild["prefix"])
+                return self.guild_[str(message.guild.id)]["prefix"]
             except:
-                self.config = APIconfig()
+                self.guild_ = self.config.get_config_guilds()
 
         # Finds out if should be Sancus_Testing or Sancus
         if TESTING_MODE == True:
@@ -163,21 +159,20 @@ class Bot(BaseBot):
                     f"{colours.PURPLE}Checking for guild during startup, {guild}{colours.ENDC}")
                 check = False
                 # Checks if guild is in the API config
-                for configGuild in self.config.guilds:
-                    if configGuild["guildID"] == str(guild.id):
-                        print("Guild In API")
-                        check = True
-                        break
+                if str(guild.id) in self.guild_:
+                    continue
                 # If guild is not in the API it sends a post request to add to the API
-                if check == False:
+                else:
                     print("Guild Not In API.... Adding now")
-                    newGuild = guildObject(str(guild.id))
-                    newGuild.prefix = "s!"
-                    ApiConnection.guild.post(newGuild)
+                    newGuild = guildObject(id=guild.id)
+                    print(newGuild.__dict__)
+                    self.config.post_config_guild(guild=newGuild)
 
             # Reloads the API config once changes have been made
-            self.config = APIconfig()
-
+            self.guild_ = self.config.get_config_guilds()
+            self.users_ = self.config.get_config_users()
+            self.reacts_ = self.config.get_config_reacts()
+            
             # Loads the help command
             self.load_extension("lib.cogs.help")
             print(f"{colours.OKCYAN}Help command has been loaded.{colours.ENDC}")
@@ -200,15 +195,14 @@ class Bot(BaseBot):
 
         # Makes a new guild object to make it easier to upload to the API
         newGuild = guildObject(str(guild.id))
-        newGuild.prefix = "s!"
 
         # Post the new guild to the API and reload the bots API save
-        ApiConnection.guild.post(newGuild)
-        self.config = APIconfig()
+        self.config.post_config_guild(newGuild)
+        self.guild_ = self.config.get_config_guilds()
 
     async def on_guild_remove(self, guild):
         "Remove left guild from api"
-        ApiConnection.guild.delete(str(guild.id))
+        self.config.delete_config_guild(str(guild.id))
 
 # On Message to process commands
     async def on_message(self, message):
