@@ -19,9 +19,8 @@ class Econ(
         robBank,
         Cog):
 
-    def __init__(self, client):
+    def __init__(self, client : bot):
         self.client = client
-        self.oldConfig = bot.oldConfig
         self.exceptions = bot.exceptions
 
     @command()
@@ -34,8 +33,8 @@ class Econ(
         embed = Embeds(
             title=f"{name} balance",
         )
-        bank = b(ctx.author.id)
-        account, wallet = bank.get_balance()
+        bank = b(self.client, ctx.guild.id, ctx.author.id)
+        account, wallet = bank.get_balance(ctx.guild.id)
 
         embed.add_field(name="Wallet:", value=str(wallet), inline=True)
         embed.add_field(name="Bank Account:", value=str(account), inline=True)
@@ -44,8 +43,8 @@ class Econ(
 
     @command()
     async def payday(self, ctx):
-        bank = b(ctx.author.id)
-        timeout = self.oldConfig.timeout(ctx.guild.id, "payday")
+        bank = b(self.client, ctx.guild.id, ctx.author.id)
+        """timeout = self.oldConfig.timeout(ctx.guild.id, "payday")
         cur_time = ctx.message.created_at.utctimetuple()
 
         try:
@@ -87,20 +86,20 @@ class Econ(
             embed.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/819496847990063114/829872480545013790/Timer-595b40b65ba036ed117d45fc.png")
 
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed)"""
 
-        except:
-            bank.add_bank_money(750)
-            await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, 750 Kudos has been added to you bank account."))
-            self.oldConfig.set_user(
-                str(ctx.author.id), "payday", calendar.timegm(cur_time))
+        
+        bank.add_bank_money(ctx.guild.id, 750)
+        await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, 750 Kudos has been added to you bank account."))
 
     @command()
     async def beg(self, ctx):
+        guildid = ctx.guild.id
+        userid = ctx.author.id
+        bank = b(self.client, guildid, userid)
 
-        timeout = self.oldConfig.timeout(ctx.guild.id, "beg")
+        """timeout = self.oldConfig.timeout(ctx.guild.id, "beg")
         cur_time = ctx.message.created_at.utctimetuple()
-        bank = b(ctx.author.id)
         try:
             timedata = self.oldConfig.user(str(ctx.author.id))['beg']
 
@@ -156,39 +155,39 @@ class Econ(
 
             await ctx.send(embed=embed)
 
-        except:
-            rand = random.randint(0, 2)
-            if rand == 1:
-                amount = random.randint(1, 360)
-                bank.add_wallet_money(amount)
+        except:"""
+        rand = random.randint(0, 2)
+        if rand == 1:
+            amount = random.randint(1, 360)
+            bank.add_wallet_money(ctx.guild.id, amount)
 
-                await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, you got very lucky this time and have been given {amount} in Kudos"))
+            await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, you got very lucky this time and have been given {amount} in Kudos"))
 
-            elif rand == 2:
-                amount = random.randint(1, 360)
-                try:
-                    bank.remove_wallet_money(amount)
+        elif rand == 2:
+            amount = random.randint(1, 360)
+            try:
+                bank.remove_wallet_money(ctx.guild.id, amount)
 
-                    await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, unlucky! Some guy just stole {amount} Kudos from you."))
+                await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, unlucky! Some guy just stole {amount} Kudos from you."))
 
-                except:
-                    await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, unlucky! Some guy just tried to rob from you. But you don't have any money"))
+            except:
+                await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, unlucky! Some guy just tried to rob from you. But you don't have any money"))
 
-            else:
-                await ctx.send(embed=Embeds(description="No one seems to be interested, try again later."))
-
+        else:
+            await ctx.send(embed=Embeds(description="No one seems to be interested, try again later."))
+            """
             self.oldConfig.set_user(
                 str(ctx.author.id), "beg", calendar.timegm(cur_time))
-
+"""
     @command()
     async def gamble(self, ctx):
         pass
 
-    @command()
+    #@command()
     async def leaderboard(self, ctx, x=5):
         users = {}
 
-        for user in self.oldConfig.USERS:
+        for user in self.client.users_:
             users[str(user)] = int(self.oldConfig.USERS.get(str(user))[
                 "bank"]) + int(self.oldConfig.USERS.get(str(user))["wallet"])
 
@@ -219,3 +218,4 @@ class Econ(
                          icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
+        
