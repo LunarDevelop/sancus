@@ -16,6 +16,10 @@ class bank():
             self.user = client.users_[str(memberID)]
             self.banks = client.users_[str(memberID)]["banks"]
             
+            if str(guildid) not in self.banks:
+                self.banks[str(guildid)] = {"bank":0, "wallet":0}
+                self.client.config.put_config_user(
+                    self.member, {"banks": self.banks})
         
         else:
             self.user = {

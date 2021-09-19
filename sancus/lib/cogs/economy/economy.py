@@ -183,13 +183,15 @@ class Econ(
     async def gamble(self, ctx):
         pass
 
-    #@command()
+    @command()
     async def leaderboard(self, ctx, x=5):
         users = {}
 
         for user in self.client.users_:
-            users[str(user)] = int(self.oldConfig.USERS.get(str(user))[
-                "bank"]) + int(self.oldConfig.USERS.get(str(user))["wallet"])
+            user_ = self.client.users_.get(user)
+            bank = b(self.client, ctx.guild.id, user_["id"])
+            account, wallet = bank.get_balance(ctx.guild.id)
+            users[str(user_["id"])] = int(account) + int(wallet)
 
         users = {k: v for k, v in sorted(
             users.items(), key=lambda item: item[1], reverse=True)}
@@ -202,8 +204,12 @@ class Econ(
 
         fields = []
         for user in users:
+            name = self.client.get_user(int(user))
+            if name == None:
+                continue
+            
             fields.append(
-                (f"{self.client.get_user(int(user))}:", users.get(user)))
+                (f"{name}:", users.get(user)))
 
         if x == 1:
             field = [fields[0]]
