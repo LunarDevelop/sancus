@@ -19,7 +19,7 @@ class Econ(
         robBank,
         Cog):
 
-    def __init__(self, client : bot):
+    def __init__(self, client: bot):
         self.client = client
         self.exceptions = bot.exceptions
 
@@ -88,7 +88,17 @@ class Econ(
 
             await ctx.send(embed=embed)"""
 
-        
+        ran = random.randint(0, 4)
+
+        if ran == 1:
+            amount = random.randint(255, 1568)
+            bank.remove_bank_money(ctx.guild.id, amount)
+            embed = Embeds(
+                description=f"{ctx.author.mention}, your just a call from the bank. They are sorry to inform you that a hacker just hacked your account.\nYou have just lost **{amount}** Kudos"
+            )
+            await ctx.send(embed=embed)
+            return
+
         bank.add_bank_money(ctx.guild.id, 750)
         await ctx.send(embed=Embeds(description=f"{ctx.author.mention}, 750 Kudos has been added to you bank account."))
 
@@ -207,7 +217,7 @@ class Econ(
             name = self.client.get_user(int(user))
             if name == None:
                 continue
-            
+
             fields.append(
                 (f"{name}:", users.get(user)))
 
@@ -224,4 +234,3 @@ class Econ(
                          icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
-        
