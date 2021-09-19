@@ -57,6 +57,7 @@ class Bot(BaseBot):
 
         # Ensuring config classes are set
         self.config = connectionDb()
+        self.config_ = self.config.get_config_config()
         self.guild_ = self.config.get_config_guilds()
         self.users_ = self.config.get_config_users()
         self.reacts_ = self.config.get_config_reacts()
@@ -70,10 +71,10 @@ class Bot(BaseBot):
 
         # Finds out if should be Sancus_Testing or Sancus
         if TESTING_MODE == True:
-            self.TOKEN = __Config__.get('DEFAULT', 'testingtoken')
+            self.TOKEN = self.config_["testToken"]
 
         elif TESTING_MODE == False:
-            self.TOKEN = __Config__.get('DEFAULT', 'token')
+            self.TOKEN = self.config_['token']
 
         print(colours.GREEN, "STARTING BOT", colours.ENDC)
 
