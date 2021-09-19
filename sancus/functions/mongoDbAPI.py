@@ -27,6 +27,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
         # GET list of all guilds
@@ -36,6 +37,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
         # GET a single user
@@ -45,6 +47,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
         # GET list of all Users
@@ -54,6 +57,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
         # GET a single reacts
@@ -63,6 +67,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
         # GET list of all reacts
@@ -72,6 +77,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
         # GET config
@@ -81,6 +87,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
     # POST Methods
@@ -89,28 +96,31 @@ class connectionDb():
     def post_config_guild(self, guild: guildObject):
         uri = self.uri+f"/{api_version}/sancus/guilds"
         r = requests.post(uri, headers=self.headers,
-                          json=guild.__dict__)
+                          json=json.dumps(guild.__dict__))
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
     def post_config_user(self, user: userObject):
         uri = self.uri+f"/{api_version}/sancus/users"
         r = requests.post(uri, headers=self.headers,
-                          json=user.__dict__)
+                          json=json.dumps(user.__dict__))
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
     def post_config_react(self, react: reactObject):
         uri = self.uri+f"/{api_version}/sancus/reacts"
         r = requests.post(uri, headers=self.headers,
-                          json=react.__dict__)
+                          json=json.dumps(react.__dict__))
         if r.status_code == 200:
             return r.json()["Content"]
         else:
+
             return None
 
     # PUT Methods
@@ -125,17 +135,18 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
 
     def put_config_user(self, id, input):
         uri = self.uri+f"/{api_version}/sancus/users"
         data = {"id": id, "input": input}
-
         r = requests.put(uri, headers=self.headers,
                          json=json.dumps(data))
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
 
     def put_config_react(self, id, name, input):
@@ -147,6 +158,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
 
         # PUT config
@@ -160,6 +172,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
 
     # DELETE Methods
@@ -174,6 +187,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
 
     def delete_config_user(self, id):
@@ -185,6 +199,7 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
 
     def delete_config_react(self, id, name):
@@ -196,4 +211,5 @@ class connectionDb():
         if r.status_code == 200:
             return r.json()
         else:
+
             return None
