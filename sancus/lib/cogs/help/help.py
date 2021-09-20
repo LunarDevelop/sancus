@@ -7,11 +7,6 @@ from datetime import datetime, timedelta
 
 import asyncio
 
-from functions.embedsDefaults import EmbedDefaults
-
-DEFAULTS = EmbedDefaults()
-
-
 class helpButtons(Cog):
     """Version 6 Help Command
     This version is using the new interaction buttons to navigate a menu."""
