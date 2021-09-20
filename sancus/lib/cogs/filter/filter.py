@@ -9,27 +9,45 @@ from lib.bot import bot
 
 class Filter(commands.Cog):
 
-    def __init__(self, client):
+    def __init__(self, client : bot):
         self.client = client
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        c = bot.config
         if not message.author.bot:
             check = requests.get(
                 f"https://www.purgomalum.com/service/containsprofanity?text=${message.content}")
-            check_ = check.text
+            check = check.text
+                    
+            if str(message.guild.id) in self.client.guilds_:
+                guild = self.client.guilds_[str(message.guild.id)]
+                filter = guild["filter"]
+                words = guild["filterWords"]
+                delete = guild["filterDelete"]
+            
+            else:
+                return
 
-            for guild in bot.config.guilds:
-                if guild["guildID"] == str(message.guild.id):
-                    filter_ = str(guild["filter"])
-                    type_ = int(guild["filterType"])
-
-            if filter_ == '1':
-                if check_ == 'true':
-                    if type_ == 0:
+            if filter:
+                if check == 'true':
+                    if delete == True:
                         await message.delete()
-                    elif type_ == 1:
+                        
+                    elif delete == False:
+                        response = requests.get(
+                            "https://insult.mattbas.org/api/insult")
+
+                        embed = Embed(
+                            colour=0x000ff0000,
+                            description=response.text
+                        )
+                        await message.channel.send(embed=embed)
+                        
+                elif message.content in words:
+                    if delete == True:
+                        await message.delete()
+
+                    elif delete == False:
                         response = requests.get(
                             "https://insult.mattbas.org/api/insult")
 
