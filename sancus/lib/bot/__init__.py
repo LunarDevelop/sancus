@@ -178,10 +178,6 @@ class Bot(BaseBot):
             self.load_extension("lib.cogs.help")
             print(f"{colours.OKCYAN}Help command has been loaded.{colours.ENDC}")
 
-            # (Feature will be removed once API takes over fully)
-            schedule.every().hour.do(self.oldConfig.save)
-            print("Scheduler for saving old config system started....")
-
             # Starting Websocket Requests
             print(f"{colours.OKCYAN}Starting Websocket Connection{colours.ENDC}")
             await startWebsocketConnection()
