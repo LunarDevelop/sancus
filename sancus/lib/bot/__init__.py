@@ -58,7 +58,7 @@ class Bot(BaseBot):
         # Ensuring config classes are set
         self.config = connectionDb()
         self.config_ = self.config.get_config_config()
-        self.guild_ = self.config.get_config_guilds()
+        self.guilds_ = self.config.get_config_guilds()
         self.users_ = self.config.get_config_users()
         self.reacts_ = self.config.get_config_reacts()
 
@@ -160,7 +160,7 @@ class Bot(BaseBot):
                     f"{colours.PURPLE}Checking for guild during startup, {guild}{colours.ENDC}")
                 check = False
                 # Checks if guild is in the API config
-                if str(guild.id) in self.guild_:
+                if str(guild.id) in self.guilds_:
                     continue
                 # If guild is not in the API it sends a post request to add to the API
                 else:
