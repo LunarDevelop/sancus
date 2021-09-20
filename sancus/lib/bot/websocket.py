@@ -3,8 +3,14 @@ import asyncio
 import json
 
 from functions.consoleColours import *
+from configparser import ConfigParser
 
-uri = "ws://websocket.link:8765"
+config = ConfigParser()
+
+with open("sancus/data/api.ini") as file:
+    config.read_file(file)
+
+uri = config["WebSocket"]["uri"]
 botName = "sancus"
 
 
