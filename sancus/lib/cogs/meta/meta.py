@@ -1,3 +1,4 @@
+from lib import bot
 from .info import Info
 import discord
 from discord.ext.commands import Cog
@@ -7,15 +8,10 @@ import random
 from asyncio import sleep
 from configparser import ConfigParser
 
-config = ConfigParser()
-with open("sancus/data/config.ini", 'r') as configFile:
-    config.read_file(configFile)
-
-
 class Meta(Info,
            Cog):
 
-    def __init__(self, client):
+    def __init__(self, client : bot):
         self.client = client
 
     @Cog.listener()
@@ -26,7 +22,7 @@ class Meta(Info,
 
         while not self.client.is_closed():
             
-            self.version = config.get('DEFAULT', 'version')
+            self.version = self.client.config_["version"]
 
             _status = self.get_status()
 
