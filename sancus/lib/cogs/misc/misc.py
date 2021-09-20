@@ -1,7 +1,9 @@
-from discord import Embed, Member
+from discord import Member
 from discord.ext.commands import command, Cog
 
 from lib.bot import bot
+
+from functions.objects import Embeds
 
 from datetime import datetime
 import json
@@ -25,7 +27,7 @@ class Misc(
     async def github(self, ctx):
         "GitHub repository link"
 
-        embed = Embed(
+        embed = Embeds(
             title="Bot Repository",
             description=f"Want to see all the behind the scenes code for {self.client.user.mention}",
             colour=0x0009900ff
@@ -33,16 +35,13 @@ class Misc(
 
         embed.set_thumbnail(
             url="https://avatars.githubusercontent.com/u/18133?s=200&v=4")
-        embed.url = "https://github.com/Solar-Productions/sancus"
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
+        embed.url = "https://github.com/LunarDevelop/sancus"
 
         await ctx.send(embed=embed)
 
     @command()
     async def invite(self, ctx):
-        embed = Embed(
+        embed = Embeds(
             title=f"Invite {self.client.user.name} to your server",
             description=f"Get access to the bot on your own server and use all the features",
             url="https://bit.ly/sancus404",
@@ -51,14 +50,11 @@ class Misc(
 
         embed.set_thumbnail(url=self.client.user.display_avatar.url)
 
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
-
         await ctx.send(embed=embed)
 
     @command()
     async def support(self, ctx):
-        embed = Embed(
+        embed = Embeds(
             title="Support??",
             description="Do you want to check out the offical support server or get some new software for yourself?",
             url="https://discord.gg/XZB8mnY6f8",
@@ -66,9 +62,6 @@ class Misc(
         )
 
         embed.set_thumbnail(url=self.client.user.display_avatar.url)
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
 
@@ -86,15 +79,12 @@ class Misc(
 
         r = requests.get(url=url).json()
 
-        embed = Embed(
+        embed = Embeds(
             description=f"{member.mention} you have received a hug by {ctx.author.mention}",
             colour=bot.oldConfig.embed(ctx.guild.id, "anime_image_nekopara")
         )
 
         embed.set_image(url=r["url"])
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
 
@@ -110,15 +100,12 @@ class Misc(
 
         r = requests.get(url=url)
 
-        embed = Embed(
+        embed = Embeds(
             description=f"{member.mention} you have received a pat by {ctx.author.mention}",
             colour=bot.oldConfig.embed(ctx.guild.id, "anime_image_nekopara")
         )
 
         embed.set_image(url=json.loads(r.content.decode("UTF-8"))['url'])
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
 
@@ -134,15 +121,12 @@ class Misc(
 
         r = requests.get(url=url)
 
-        embed = Embed(
+        embed = Embeds(
             description=f"{member.mention} you have received a slap by {ctx.author.mention}",
             colour=bot.oldConfig.embed(ctx.guild.id, "anime_image_nekopara")
         )
 
         embed.set_image(url=json.loads(r.content.decode("UTF-8"))['url'])
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
 
@@ -156,7 +140,7 @@ class Misc(
 
     @command()
     async def patreon(self, ctx):
-        embed = Embed(
+        embed = Embeds(
             title="Patreon Perks",
             description=f"Help support Sancus and the others in their continued adventure to climb the ladder.",
             url=" https://www.patreon.com/solarbam",
@@ -166,21 +150,15 @@ class Misc(
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/789247201678327838/880746027999690772/Digital-Patreon-Logo_FieryCoral.png")
 
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
-
         await ctx.send(embed=embed)
 
     @command()
     async def info(self, ctx):
-        embed = Embed(
+        embed = Embeds(
             title="About me | The creator, Solar",
             description="""I started programming stuff in Secondary School here in the UK. Sancus was my first big project and the first libray that I understood. He is also made the ground work for me to go out and learn serval other things. For example learn HTML, CSS and JS to make the website (still working on it :P ) and C# to make the API link to my database. Along side many other things. 
             \n I inspire to continue coding and make some sort of living of it. Current trying to find a starting place for all of that but I love coding and love being a part of the amazing community
             \n\n The idea behind Sancus was orginally just to have a bit of fun and make a cool bot for my mate. I then decided to expand upon that and make a full functional bot with tons of features and make it public, which I believe I am getting very close to fully functional personally. There are still sections which need to fined tuned but so far it is all okay."""
         )
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         await ctx.send(embed=embed)
