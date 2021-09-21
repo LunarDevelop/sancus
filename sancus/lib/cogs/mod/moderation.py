@@ -1,6 +1,6 @@
 import discord
-from discord.abc import Message
 from discord.ext.commands import Cog
+from discord.message import Message
 
 class antispam(Cog):
     
@@ -10,10 +10,11 @@ class antispam(Cog):
         self.client = client
         
         
-    @Cog.listener(name="Anti Mention Spam")
+    @Cog.listener()
     async def on_message(self, msg:Message):
-        mentionList = msg.mentions
-        
-        if len(mentionList) > 5:
-            await msg.delete()
+        if not msg.author.bot and msg.author:
+            mentionList = msg.mentions + msg.role_mentions
+            
+            if len(mentionList) > 5:
+                await msg.delete()
     
