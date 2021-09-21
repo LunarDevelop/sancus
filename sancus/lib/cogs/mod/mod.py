@@ -1,5 +1,4 @@
 from discord import colour
-from lib.cogs.help.help import DEFAULTS
 import discord
 from discord.embeds import Embed
 from discord.ext.commands import command, Cog, has_permissions
@@ -12,26 +11,32 @@ from time import sleep
 
 from lib.bot import bot
 
-from .settings import Settings
-from .react import reaction
+#from .settings import Settings
+#from .react import reaction
 
 
 class Mod(
-    Settings,
-    reaction,
+    #Settings,
+    #reaction,
         Cog):
 
     def __init__(self, client):
         self.client = client
 
+    # Clear command
     @command()
     @has_permissions(manage_permissions=True)
     async def clear(self, ctx, amount=5):
-        """Clears a set of using the amount to say how many will be removed"""
+        """Clears a set of using the amount to say how many will be removed
+
+        Args:
+
+        Amount: The amount of messages to remove"""
 
         await ctx.channel.purge(limit=amount, bulk=True)
         await ctx.send("Clearing is done!!", delete_after=1)
 
+    # Kick User
     @command()
     @has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
@@ -87,6 +92,7 @@ class Mod(
         else:
             await ctx.send("You cannot kick that person, you are below them on the role chain.")
 
+    # Ban User
     @command()
     @has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason="No reason was provided"):
@@ -145,11 +151,11 @@ class Mod(
                 pass
             return True
 
-
         else:
             await ctx.send("You cannot ban this user!")
             return False
 
+    # Unban User
     @command()
     @has_permissions(ban_members=True)
     async def unban(self, ctx, member):
@@ -240,31 +246,6 @@ class Mod(
 
     @command()
     @has_permissions(manage_messages=True)
-    async def avatar(self, ctx, member: discord.Member):
-        """Sends a bigger picture of the users avatar.
-
-        Args:
-
-        Member : The member you would like to see the avartar of
-        """
-
-        avatarURL = member.display_avatar.url
-
-        embed = Embed(
-            title=f"{member.name}#{member.discriminator}'s avatar",
-            colour=member.colour,
-            timestamp=datetime.utcnow()
-        )
-
-        embed.set_image(url=avatarURL)
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
-
-        await ctx.send(embed=embed)
-
-    @command()
-    @has_permissions(manage_messages=True)
     async def warning(self, ctx, user: discord.Member, *, reason=None):
         """Warn a user
 
@@ -299,3 +280,29 @@ class Mod(
 
         except:
             pass
+
+    # Show Avatar of a Player
+    @command()
+    @has_permissions(manage_messages=True)
+    async def avatar(self, ctx, member: discord.Member):
+        """Sends a bigger picture of the users avatar.
+
+        Args:
+
+        Member : The member you would like to see the avartar of
+        """
+
+        avatarURL = member.display_avatar.url
+
+        embed = Embed(
+            title=f"{member.name}#{member.discriminator}'s avatar",
+            colour=member.colour,
+            timestamp=datetime.utcnow()
+        )
+
+        embed.set_image(url=avatarURL)
+
+        embed.set_footer(text=self.client.embedAuthorName,
+                         icon_url=self.client.embedAuthorUrl)
+
+        await ctx.send(embed=embed)
