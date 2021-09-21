@@ -65,9 +65,9 @@ class Bot(BaseBot):
         # Find and return prefix for request guilf via message object
         def get_prefix(self, message):
             try:
-                return self.guild_[str(message.guild.id)]["prefix"]
+                return self.guilds_[str(message.guild.id)]["prefix"]
             except:
-                self.guild_ = self.config.get_config_guilds()
+                self.guilds_ = self.config.get_config_guilds()
 
         # Finds out if should be Sancus_Testing or Sancus
         if TESTING_MODE == True:
@@ -170,10 +170,10 @@ class Bot(BaseBot):
                     self.config.post_config_guild(guild=newGuild)
 
             # Reloads the API config once changes have been made
-            self.guild_ = self.config.get_config_guilds()
+            self.guilds_ = self.config.get_config_guilds()
             self.users_ = self.config.get_config_users()
             self.reacts_ = self.config.get_config_reacts()
-            
+
             # Loads the help command
             self.load_extension("lib.cogs.help")
             print(f"{colours.OKCYAN}Help command has been loaded.{colours.ENDC}")
@@ -195,7 +195,7 @@ class Bot(BaseBot):
 
         # Post the new guild to the API and reload the bots API save
         self.config.post_config_guild(newGuild)
-        self.guild_ = self.config.get_config_guilds()
+        self.guilds_ = self.config.get_config_guilds()
 
     async def on_guild_remove(self, guild):
         "Remove left guild from api"
@@ -222,9 +222,8 @@ class Bot(BaseBot):
         self.crossEmoji = self.get_emoji(872992645302075392)
 
     def getGuild(self, id):
-        for guild in self.config.guilds:
-            if guild["guildID"] == str(id):
-                return guild
+        if id in self.guilds_:
+            return self.guilds_[str(id)]
 
     async def getLogChannel(self, id):
         guild = self.getGuild(id)
