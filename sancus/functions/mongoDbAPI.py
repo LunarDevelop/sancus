@@ -164,7 +164,7 @@ class connectionDb():
         # PUT config
 
     def put_config_config(self, input):
-        uri = self.uri+f"/{api_version}/sancus/guilds"
+        uri = self.uri+f"/{api_version}/sancus/config"
         data = {"id": 0, "input": input}
 
         r = requests.put(uri, headers=self.headers,
