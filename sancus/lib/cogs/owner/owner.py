@@ -6,7 +6,7 @@ from discord.client import Client
 from discord.enums import ButtonStyle
 from lib import bot
 
-from functions.apiConnection import APIconfig, ApiConnection
+from functions.mongoDbAPI import *
 from functions.objects import guildObject, Embeds
 
 import discord
@@ -24,20 +24,8 @@ from .mail import Mail
 
 from lib.bot import Bot
 
-# COGS
-COGS = [path.split("\\")[-1][:-3] for path in glob("lib/cogs/**/*.py")]
-
-Config = ConfigParser()
-
-with open("sancus/data/config.ini", 'r') as f:
-    Config.read_file(f)
-
-cogsList = Config.get('DEFAULT', 'COGS')
-cogsList = cogsList.strip("[] ,")
-cogsList = cogsList.split(" , ")
-
 ###
-
+COGS = [path.split("\\")[-1][:-3] for path in glob("sancus/lib/cogs/**/*.py")]
 
 class Owner(
         Mail,
@@ -45,20 +33,38 @@ class Owner(
 ):
 
     def __init__(self, client):
-        self.client : Client = client
+        self.client: Bot = client
 
         self.back_arrow = self.client.get_emoji(880261491587166229)
         self.forward_arrow = self.client.get_emoji(880261496167358484)
 
-        self.Config = ConfigParser()
 
-        with open("sancus/data/config.ini", 'r') as configFile:
-
-            self.Config.read_file(configFile)
-
-    @Cog.listener()
-    async def on_interaction(self, payload):
-        print(payload.data)
+    @command()
+    async def systemUpdate(self, ctx, x :str = "guilds"):
+        async def guilds():
+            for guild in self.client.guilds_:
+                data = guildObject(**self.client.guilds_.get(guild))
+                self.client.config.put_config_guild(int(guild), data.__dict__)
+                
+            self.client.guilds_ = self.client.config.get_config_guilds()
+            await ctx.send("Guild Sys update done!")
+        
+        async def users():
+            for user in self.client.users_:
+                data = userObject(**self.client.users_.get(user))
+                self.client.config.put_config_user(int(user), data.__dict__)
+            self.client.guilds_ = self.client.config.get_config_guilds()
+            await ctx.send("User Sys update done")
+            
+        if x.lower() == "all":
+            await guilds()
+            await users()
+            
+        elif x.lower() == "guilds":
+            await guilds()
+        
+        elif x.lower() == "users":
+            await users()
 
     @command()
     async def test(self, ctx):
@@ -73,12 +79,12 @@ class Owner(
     async def on_guild_join(self, guild):
         """Notifies Lunar Development Discord of a new guild"""
 
-        channel = self.Config.get('DEFAULT', 'guild_join_channel')
+        channel = self.client.config_["guild_join_channel"]
         channel = self.client.get_channel(int(channel))
 
         embed = Embed(
             title="A guild has invited Sancus",
-            colour=int(self.Config.get('DEFAULT', 'guild_join_embed'), 16)
+            colour=0x0007c5295
         )
 
         totalGuilds = len(self.client.guilds)
@@ -100,12 +106,12 @@ class Owner(
     async def on_guild_remove(self, guild):
         """Notifies Lunar Development Discord when a guild leaves the bot"""
 
-        channel = self.Config.get('DEFAULT', 'guild_remove_channel')
+        channel = self.client.config_["guild_remove_channel"]
         channel = self.client.get_channel(int(channel))
 
         embed = Embed(
             title="A guild has removed Sancus",
-            colour=int(self.Config.get('DEFAULT', 'guild_remove_embed'), 16)
+            colour=0x0007c5295
         )
 
         totalGuilds = len(self.client.guilds)
@@ -195,25 +201,21 @@ class Owner(
         await ctx.send(embed=embed)"""
 
 # Commands
-    # @Cog.listener()
+    @Cog.listener()
     async def on_command(self, ctx):
-        with open("sancus/data/config.ini", 'r') as configFile:
-            Config.read_file(configFile)
-
-        if Config.getboolean('DEFAULT', "maintenance_mode"):
+        if self.client.config_["maintenance"]:
             await ctx.send(f"{self.client.user.mention} is entering maintenance mode and may go down in a little while. I appolgised for any inconvenience the bot will be sorted soon.")
 
-        if Config.getboolean('DEFAULT', 'command_logging'):
+        if self.client.config_["command_log"]:
             embed = Embed(
                 title=f"{ctx.author.id}, {ctx.author.name} has excuted a command.",
                 description=f"{ctx.command.name} was excuted in {ctx.guild.name}, {ctx.guild.id}",
                 colour=0x7ccd7
             )
 
-            channel = self.client.get_channel(
-                int(Config.get('DEFAULT', 'command_logging_channel')))
-
-            await channel.send(embed=embed)
+            channel = self.client.get_channel(self.client.config_["command_channel"])
+            if channel != None:
+                await channel.send(embed=embed)
 
 # Admin work
     @group(name="set")
@@ -223,15 +225,12 @@ class Owner(
 
     @_set.command()
     async def maintenance(self, ctx, toggle):
-        with open("sancus/data/config.ini", 'r') as configFile:
-
-            Config.read_file(configFile)
-
-        Config.set('DEFAULT', 'maintenance_mode', toggle)
-
-        with open("sancus/data/config.ini", 'w') as configFile:
-            Config.write(configFile)
-
+        data = {"maintenance": bool(int(toggle))}
+        data = json.dumps(data)
+        
+        self.client.config.put_config_config(data)
+        self.client.config_ = self.client.config.get_config_config()
+        
         await ctx.send("Maintenance Mode has changed.")
 
     @command()
@@ -256,7 +255,7 @@ class Owner(
             channel = ctx.channel
 
         for emoji in emoji_list:
-            embed = Embed(
+            embed = Embeds(
                 title=emoji.name,
                 description=f"{emoji.id}\n`<:{emoji.name}:{emoji.id}>`"
             )
@@ -286,7 +285,7 @@ class Owner(
             if cogs[0] == '__init__':
                 pass
             else:
-                for cogsA in cogsList:
+                for cogsA in self.client.config_["cogs"]:
                     if cogs[0] == cogsA:
                         try:
                             self.client.load_extension(f"lib.cogs.{cogs[0]}")
@@ -379,7 +378,7 @@ class Owner(
                 if cogs[0] == '__init__':
                     pass
                 else:
-                    for cogsA in cogsList:
+                    for cogsA in self.client.config_["cogs"]:
                         if cogs[0] == cogsA:
                             try:
                                 self.client.unload_extension(
