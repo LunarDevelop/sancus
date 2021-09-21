@@ -37,6 +37,8 @@ class guildObject():
                  filter: bool = False,
                  filterDelete: bool = True,
                  filterWords: Optional[list] = None,
+                 logChannel: Optional[int] = None,
+                 actionChannel: Optional[int] = None,
                  welcomeMessage: bool = False,
                  welcomeType: bool = False,  # False means text based # True means banner style
                  welcomeChannel: Optional[int] = None,
@@ -52,6 +54,8 @@ class guildObject():
         self.filter = filter
         self.filterDelete = filterDelete
         self.filterWords = filterWords
+        self.logChannel = logChannel
+        self.actionChannel = actionChannel
         self.welcomeMessage = welcomeMessage
         self.welcomeType = welcomeType
         self.welcomeChannel = welcomeChannel
