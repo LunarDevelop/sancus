@@ -18,14 +18,14 @@ class robBank(commands.Cog):
         user = ctx.author.id
 
         chances = random.randrange(1, 3)
-
+        b = bank(self.client,ctx.guild.id,ctx.author.id)
         if chances == 1:
             """ROBBED BANK"""
 
             amount = random.randrange(1500, 3000)
-            bank(ctx.author.id).add_bank_money(amount)
+            b.add_bank_money(ctx.guild.id,amount)
 
-            wallet, bank_account = bank(ctx.author.id).get_balance()
+            bank_account, wallet = b.get_balance(ctx.guild.id)
 
             embed = Embeds(
                 title=":moneybag: You have successfully rob Sancus Bank :moneybag:",
@@ -39,9 +39,9 @@ class robBank(commands.Cog):
         else:
             """FAILED"""
             amount = random.randrange(650, 1000)
-            bank(ctx.author.id).remove_bank_money(amount)
+            b.remove_bank_money(ctx.guild.id, amount)
 
-            wallet, bank_account = bank(ctx.author.id).get_balance()
+            bank_account, wallet = b.get_balance(ctx.guild.id)
 
             embed = Embeds(
                 title=":oncoming_police_car: You have failed to rob Sancus Bank :oncoming_police_car: ",
