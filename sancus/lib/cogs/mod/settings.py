@@ -1,7 +1,14 @@
 
 
+from discord import interactions
+from discord.enums import ButtonStyle
+from discord.message import Message
+from lib.bot import Bot
+from functions.objects import Embeds
 from functions.objects import guildObject
-from functions.apiConnection import ApiConnection, APIconfig
+from discord.ui import button, Button
+from discord.interactions import Interaction
+from discord.ui.view import View
 
 import discord
 from discord import Embed
@@ -9,12 +16,9 @@ from asyncio import sleep
 
 import validators
 
-from discord.ext.commands import has_permissions, command, Cog, group
+from discord.ext.commands import context, has_permissions, command, Cog, group
 
 from lib.bot import bot
-from functions.embedsDefaults import EmbedDefaults
-
-DEFAULTS = EmbedDefaults()
 
 
 def channels(client, channel):
@@ -28,127 +32,185 @@ def guild_(client):
 
 class Settings(Cog):
 
-    def __init__(self, client):
+    def __init__(self, client: Bot):
         self.client = client
 
-    @group(name="setup")
-    async def _setup(self, ctx):
-        pass
+    class Prefix(View):
 
-    @_setup.command()
-    async def menu_(self, ctx):
-        """Setup command for all the stuff you need"""
+        def __init__(self, bot):
+            super().__init__()
+            self.bot = bot
 
-        embed = discord.Embed(
-            title="Set Up Command",
-            colour=0x000e8a302
-        )
+        @button(
+            label="Change Prefix",
+            custom_id="change",
+            style=ButtonStyle.green,
+            row=0)
+        async def recieve(self, button: Button, interaction: Interaction):
+            while True:
+                cur_prefix = bot.guilds_[
+                    str(interaction.guild.id)]["prefix"]
+                embed = Embeds(
+                    title="Change Prefix",
+                    description="Type your new prefix below"
+                )
 
-        msg = await ctx.send(embed=embed)
+                msg = await interaction.response.edit_message(embed=embed, view=None)
 
-        async with ctx.channel.typing():
+                valueObj: Message = await bot.wait_for("message", timeout=120, check=lambda i: i.author.id == interaction.user.id)
+
+                value = valueObj.content
+
+                if len(value) < 1 or len(value) > 5:
+                    embed.description = "Prefix needs to be between 1 and 5 characters long"
+
+                elif value != None and value != cur_prefix:
+                    self.bot.client.config.put_config_guild(
+                        interaction.guild.id, {"prefix": value})
+                    self.bot.client.guilds_ = self.bot.client.config.get_config_guilds()
+
+                await valueObj.delete()
+                break
+            msg = interaction.message
+            cur_prefix = bot.guilds_[
+                str(interaction.guild_id)]["prefix"]
+            value = None
+            menu = self.bot.Prefix(self.bot)
+
+            embed = Embeds(
+                title="Prefix Menu",
+                description=f"If you would like to change the prefix please select **Change** below and type the new prefix in this channel. Otherwise click main menu.\n\n`Current Prefix:` **{cur_prefix}**"
+            )
+
+            await msg.edit(embed=embed, view=menu)
+
+        @button(
+            label="Main Menu",
+            custom_id="menu",
+            style=ButtonStyle.blurple)
+        async def receive(self, button:Button, interaction:Interaction):
+            embed = Embeds(
+                title=f"{interaction.guild.name}'s Settings",
+                colour=0x000e8a302)
 
             fields = [
-                ("Changing Comand Prefix", f"You can change your prefix within your server, by typing the command `setup prefix <new prefix>`. So for example it would `setup prefix !!`. That would change the prefix to !! instead of your current prefix"),
-                ("Filter setting", f"You can change the setting for the filter on your server by typing `setup filter`"),
-                ("Filter Type", f"Change the filter type. `setup filtertype`"),
-                ("LogChannel", "Change the log channel that your server uses. `setup logchannel`"),
+                ("Changing Comand Prefix",
+                f"Change how users on your server use commands on {self.bot.client.user.name}"),
+                ("Filter setting",
+                f"Change how the filter reacts, if its on and the custom filter"),
+                ("LogChannel",
+                f"Change the log channel that your server uses."),
                 ("Action Channel",
-                 "Change the action channel for your server. `setup actionchannel`")
-                ("Welcome message menu",
-                 f"Edit your welcome messages. 'setup welcome help'"),
-                #("Enable/Disable commands", f"You can disable or enable commands for your server by doing the following \n setup disableCommand <command> or `setup enableCommand <command>`"),
-                #("Embed (beta)", f"Settings for embed messages. `setup embeds help`"),
-                #("Channel settings (beta)", f"Add or remove channels from your guild. `setup channel help`")
+                 f"Change the action channel for {interaction.guild.name}."),
+                ("Welcome User Message",
+                f"Open the welcome message editor"),
             ]
 
             for name, value in fields:
                 embed.add_field(name=name, value=value, inline=False)
 
-                await sleep(1)
-                await msg.edit(embed=embed)
+            msg: Message = await interaction.response.edit_message(embed=embed, view=self.bot.Main(self.bot))
 
-    # setting prefix statements
+    class Filter(View):
+        pass
+    class Main(View):
 
-    @_setup.command()
-    async def prefix(self, ctx, new: str):
-        """Change your server's prefix to use the bot. 
+        def __init__(self, bot):
+            super().__init__()
+            self.bot = bot
 
-        Prefix cannot be more then 5 charcters in length
-        """
+        @button(
+            label="Prefix",
+            style=ButtonStyle.blurple)
+        async def prefix(self, button: Button, interaction: Interaction):
 
-        if len(new) > 5:
-            await ctx.send("The prefix can not be more then 5 characters in length")
+            """Change your server's prefix to use the bot.
 
-        else:
+                    Prefix cannot be more then 5 charcters in length
+                    """
+            cur_prefix = bot.guilds_[
+                str(interaction.guild_id)]["prefix"]
+            menu = self.bot.Prefix(self.bot)
 
-            newObject = guildObject(ctx.guild.id)
-            newObject.prefix = str(new)
+            embed = Embeds(
+                title="Prefix Menu",
+                description=f"If you would like to change the prefix please select **Change** below and type the new prefix in this channel. Otherwise click main menu.\n\n`Current Prefix:` **{cur_prefix}**"
+            )
 
-            ApiConnection.guild.put(newObject)
+            await interaction.response.edit_message(embed=embed, view=menu)
+        
+        @button(
+            label="Filter",
+            style=ButtonStyle.blurple
+        )
+        async def filter(self, button:Button, interaction:Interaction):
+            pass
+        
+        @button(
+            label="Log Channel",
+            style=ButtonStyle.blurple
+        )
+        async def log(self, button: Button, interaction: Interaction):
+            pass
+        
+        @button(
+            label="Action Channel",
+            style=ButtonStyle.blurple
+        )
+        async def action(self, button: Button, interaction: Interaction):
+            pass
+        
+        @button(
+            label="Manage Welcoming",
+            style=ButtonStyle.blurple
+        )
+        async def welcome(self, button: Button, interaction: Interaction):
+            pass
+        
+        @button(
+            label="Close!",
+            style=ButtonStyle.red
+        )
+        async def close(self, button: Button, interaction: Interaction):
+            embed = Embeds(
+                title=f"{interaction.guild.name}'s Guild Settings",
+                description=f"""Prefix: **{self.bot.client.guilds_[str(interaction.guild.id)]["prefix"]}**
+                Filter On: **{self.bot.client.guilds_[str(interaction.guild.id)]["filter"]}**
+                """,
+                colour=0x000e8a302
+            )
+            
+            await interaction.response.edit_message(embed=embed, view=None)
 
-            bot.config = APIconfig()
+    @command(name="setup")
+    async def _setup(self, ctx: context.Context):
+        embed = Embeds(
+            title=f"{ctx.guild.name}'s Settings",
+            colour=0x000e8a302
+        )
 
-            await ctx.send(f'Prefix set to {new}.')
+        await ctx.message.delete()
 
-    # Filter Setting
-    @_setup.command(name="filter")
-    async def _filter(self, ctx, new: int):
-        """Change the filter settings for your server
+        fields = [
+            ("Changing Comand Prefix",
+             f"Change how users on your server use commands on {self.client.user.name}"),
+            ("Filter setting",
+             f"Change how the filter reacts, if its on and the custom filter"),
+            ("LogChannel",
+             f"Change the log channel that your server uses."),
+            ("Action Channel",
+             f"Change the action channel for {ctx.guild.name}."),
+            ("Welcome User Message",
+             f"Open the welcome message editor"),
+        ]
 
-        0 = Filter Off
-        1 = Filter On"""
+        for name, value in fields:
+            embed.add_field(name=name, value=value, inline=False)
 
-        msg = await ctx.send("Updating Config...Please wait.")
+        await ctx.send(embed=embed, view=self.Main(self))
 
-        newObject = guildObject(ctx.guild.id)
-        newObject.filter = str(new)
 
-        ApiConnection.guild.put(newObject)
-
-        bot.config = APIconfig()
-
-        await msg.edit(content=f'Filter set to {new}.')
-
-    # Filter Type Setting
-    @_setup.command()
-    async def filtertype(self, ctx, new: int):
-        """Change the filter type for your server
-
-        0 - Delete Messages
-        1- Return an Insult"""
-
-        newObject = guildObject(ctx.guild.id)
-        newObject.filterType = str(new)
-
-        ApiConnection.guild.put(newObject)
-
-        bot.config = APIconfig()
-
-        await ctx.send(f'Filter Type set to {new}.')
-
-    @_setup.command()
-    async def cfilter(self, ctx):
-        """Opens the custom filter menu"""
-
-        await ctx.send("This feature is currently in development.")
-
-    # Setting Logchannel
-    @_setup.command()
-    async def logchannel(self, ctx, new: int):
-        """Changing the the log channel where everything that happens on the server is logged for you to view
-
-        Channel ID : You need to enter the channel id number so it can assigned to the log channel"""
-
-        newObject = guildObject(ctx.guild.id)
-        newObject.logChannel = str(new)
-
-        ApiConnection.guild.put(newObject)
-
-        bot.config = APIconfig()
-
-        await ctx.send(f'Log Channel has been set to {new}.')
-
+'''
     # Setting Actionchannel
     @_setup.command()
     async def actionchannel(self, ctx, new: int):
@@ -164,176 +226,6 @@ class Settings(Cog):
         bot.config = APIconfig()
 
         await ctx.send(f'Action Channel set to {new}.')
-
-    @_setup.group(name='embeds')
-    async def _embeds(self, ctx):
-        """Group for the embed commands
-
-        Commands:
-            set: Changes the colour of the embed that you have selected
-            list: Lists all the embeds that are on your guild and their colours"""
-        pass
-
-    @_embeds.command()
-    async def menu(self, ctx):
-        """Setup command for all the stuff you need"""
-
-        embed = discord.Embed(
-            title="Embed Command",
-            colour=0x000e8a302
-        )
-
-        msg = await ctx.send(embed=embed)
-
-        async with ctx.channel.typing():
-
-            fields = [
-                ("set", f"Set the embeds message colour"),
-                ("list", "List all the embed message that have custom colours")
-            ]
-
-            for name, value in fields:
-                embed.add_field(name=name, value=value, inline=False)
-
-                await sleep(1)
-                await msg.edit(embed=embed)
-
-    @_embeds.command(name="set")
-    async def set_(self, ctx, embedname, colour):
-        """Change the embed colour
-
-        Args:
-            embed name: The name of the embed which you can find by doing the command `embeds list`
-            colour: The hex colour for the embed."""
-
-        bot.oldConfig.set_embed(str(ctx.guild.id), embedname, colour)
-
-    @_embeds.command(name="list")
-    async def list_(self, ctx):
-        """List all the embeds for your guild"""
-
-        doptionlist = []
-        coptionlist = []
-        colour = bot.oldConfig.embed(str(ctx.guild.id), "setting_menus")
-        doptionlist = bot.config.EMBEDS['DEFAULT']
-
-        defaults = Embed(
-            title="Default list of embed colours",
-            colour=colour
-        )
-        for option in doptionlist:
-            defaults.add_field(
-                name=option, value=doptionlist.get(option), inline=False)
-
-        try:
-            coptions = bot.oldConfig.EMBEDS[str(ctx.guild.id)]
-
-        except:
-            await ctx.send(embed=defaults)
-            return
-
-        customembeds = Embed(
-            title="Custom embeds for your server",
-            colour=colour
-        )
-
-        for option, value in coptionlist:
-            customembeds.add_field(name=option, value=value, inline=False)
-
-        menu = PaginatedMenu(ctx)
-        menu.set_timeout(90)
-        menu.set_timeout_page(DEFAULTS.timeout(ctx.guild.id))
-        menu.set_cancel_page(DEFAULTS.cancel(ctx.guild.id))
-
-        menu.add_pages([customembeds, defaults])
-
-        await menu.open()
-
-    @_setup.group(name='timeout')
-    async def _timeout(self, ctx):
-        """Group for the embed commands
-
-        Commands:
-            set: Changes the colour of the embed that you have selected
-            list: Lists all the embeds that are on your guild and their colours"""
-        pass
-
-    @_timeout.command()
-    async def menu(self, ctx):
-        """Setup command for all the stuff you need"""
-
-        embed = discord.Embed(
-            title="Embed Command",
-            colour=0x000e8a302
-        )
-
-        msg = await ctx.send(embed=embed)
-
-        async with ctx.channel.typing():
-
-            fields = [
-                ("set [embedName] [hexColour]",
-                 f"Set the timeout for a command"),
-                ("list", "List all the commands which have a timeout")
-            ]
-
-            for name, value in fields:
-                embed.add_field(name=name, value=value, inline=False)
-
-                await sleep(1)
-                await msg.edit(embed=embed)
-
-    @_timeout.command(name="set")
-    async def set_(self, ctx, timeoutname, seconds):
-        """Change the embed colour
-
-        Args:
-            timeout name: The name of the timeout which you can find by doing the command `timeout list`
-            seconds: The amount of seconds you want the command to be on cooldown for."""
-
-        bot.oldConfig.set_timeout(str(ctx.guild.id), timeoutname, seconds)
-        await ctx.send(f"{timeoutname}, changed to {seconds}")
-
-    @_timeout.command(name="list")
-    async def list_(self, ctx):
-        """List all the timouts for your guild"""
-
-        doptionlist = []
-        coptionlist = []
-        colour = bot.oldConfig.embed(str(ctx.guild.id), "setting_menus")
-        doptionlist = bot.oldConfig.TIMEOUTS['DEFAULT']
-
-        defaults = Embed(
-            title="Default list of timeout settings",
-            colour=colour
-        )
-        for option in doptionlist:
-            defaults.add_field(
-                name=option, value=doptionlist.get(option), inline=False)
-
-        try:
-            coptionlist = bot.oldConfig.TIMEOUTS[str(ctx.guild.id)]
-
-        except:
-            await ctx.send(embed=defaults)
-            return
-
-        customtimeouts = Embed(
-            title="Custom timeout for your server",
-            colour=colour
-        )
-
-        for option, value in coptionlist:
-            customtimeouts.add_field(name=option, value=value, inline=False)
-
-        menu = PaginatedMenu(ctx)
-        menu.set_timeout(90)
-        menu.set_timeout_page(DEFAULTS.timeout(ctx.guild.id))
-        menu.set_cancel_page(DEFAULTS.cancel(ctx.guild.id))
-
-        menu.add_pages([customtimeouts, defaults])
-
-        await menu.open()
 
     @group(name="channel")
     async def _channels(self, ctx):
@@ -708,3 +600,4 @@ Credit goes to Builderb#0001 on Discord and the Fluxpoint team for all of the ba
             await ctx.send(f'Icon set to {httpsLink}.')
         else:
             await ctx.send("Invalid image url")
+'''
