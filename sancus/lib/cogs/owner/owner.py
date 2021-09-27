@@ -1,6 +1,7 @@
 import asyncio
 from asyncio.tasks import sleep
 from datetime import datetime
+from .admin_slash import admin_slash
 from discord.client import Client
 
 from discord.enums import ButtonStyle
@@ -29,6 +30,7 @@ COGS = [path.split("\\")[-1][:-3] for path in glob("sancus/lib/cogs/**/*.py")]
 
 class Owner(
         Mail,
+        admin_slash,
         Cog
 ):
 
@@ -37,7 +39,6 @@ class Owner(
 
         self.back_arrow = self.client.get_emoji(880261491587166229)
         self.forward_arrow = self.client.get_emoji(880261496167358484)
-
 
     @command()
     async def systemUpdate(self, ctx, x :str = "guilds"):
