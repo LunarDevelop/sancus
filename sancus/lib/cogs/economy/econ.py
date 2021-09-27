@@ -27,33 +27,33 @@ class bank():
                 "banks" : {str(guildid): {"bank":0, "wallet":0}}
             }
             self.banks = self.user["banks"]
-            user = userObject(memberID, self.user["banks"])
+            user = userObject(memberID, self.banks)
             self.client.config.post_config_user(user)
             
 
     def get_balance(self, guildid):
-        return self.banks[str(guildid)]['bank'], self.user["banks"][str(guildid)]["wallet"]
+        return self.banks[str(guildid)]['bank'], self.banks[str(guildid)]["wallet"]
 
     def add_wallet_money(self, guildid, amount):
-        total = int(self.user["banks"][str(guildid)]['wallet']) + amount
+        total = int(self.banks[str(guildid)]['wallet']) + amount
         self.banks[str(guildid)]["wallet"] = total                
         self.client.config.put_config_user(self.member, {"banks":self.banks})
         self.client.users_ = self.client.config.get_config_users()
         
     def add_bank_money(self, guildid, amount):
-        total = int(self.user["banks"][str(guildid)]['bank']) + amount
+        total = int(self.banks[str(guildid)]['bank']) + amount
         self.banks[str(guildid)]["bank"] = total
         self.client.config.put_config_user(self.member, {"banks": self.banks})
         self.client.users_ = self.client.config.get_config_users()
 
     def remove_wallet_money(self, guildid, amount):
-        total = int(self.user["banks"][str(guildid)]['wallet']) - amount
+        total = int(self.banks[str(guildid)]['wallet']) - amount
         self.banks[str(guildid)]["wallet"] = total
         self.client.config.put_config_user(self.member, {"banks": self.banks})
         self.client.users_ = self.client.config.get_config_users()
 
     def remove_bank_money(self, guildid, amount):
-        total = int(self.user["banks"][str(guildid)]['bank']) - amount
+        total = int(self.banks[str(guildid)]['bank']) - amount
         self.banks[str(guildid)]["bank"] = total
         self.client.config.put_config_user(self.member, {"banks": self.banks})
         self.client.users_ = self.client.config.get_config_users()
