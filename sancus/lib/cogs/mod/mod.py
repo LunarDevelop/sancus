@@ -11,13 +11,13 @@ from time import sleep
 
 from lib.bot import bot
 
-#from .settings import Settings
+from .settings import Settings
 #from .react import reaction
 from .moderation import antispam
 
 
 class Mod(
-    #Settings,
+    Settings,
     #reaction,
     antispam,
         Cog):
