@@ -20,6 +20,8 @@ from discord.ext.commands import context, has_permissions, command, Cog, group
 
 from lib.bot import bot
 
+from .views import *
+
 
 def channels(client, channel):
     pass
@@ -30,157 +32,10 @@ def guild_(client):
     return guild__
 
 
-class Settings(Cog):
+class Settings(main,Cog):
 
     def __init__(self, client: Bot):
         self.client = client
-
-    class Prefix(View):
-
-        def __init__(self, bot):
-            super().__init__()
-            self.bot = bot
-
-        @button(
-            label="Change Prefix",
-            custom_id="change",
-            style=ButtonStyle.green,
-            row=0)
-        async def recieve(self, button: Button, interaction: Interaction):
-            while True:
-                cur_prefix = bot.guilds_[
-                    str(interaction.guild.id)]["prefix"]
-                embed = Embeds(
-                    title="Change Prefix",
-                    description="Type your new prefix below"
-                )
-
-                msg = await interaction.response.edit_message(embed=embed, view=None)
-
-                valueObj: Message = await bot.wait_for("message", timeout=120, check=lambda i: i.author.id == interaction.user.id)
-
-                value = valueObj.content
-
-                if len(value) < 1 or len(value) > 5:
-                    embed.description = "Prefix needs to be between 1 and 5 characters long"
-
-                elif value != None and value != cur_prefix:
-                    self.bot.client.config.put_config_guild(
-                        interaction.guild.id, {"prefix": value})
-                    self.bot.client.guilds_ = self.bot.client.config.get_config_guilds()
-
-                await valueObj.delete()
-                break
-            msg = interaction.message
-            cur_prefix = bot.guilds_[
-                str(interaction.guild_id)]["prefix"]
-            value = None
-            menu = self.bot.Prefix(self.bot)
-
-            embed = Embeds(
-                title="Prefix Menu",
-                description=f"If you would like to change the prefix please select **Change** below and type the new prefix in this channel. Otherwise click main menu.\n\n`Current Prefix:` **{cur_prefix}**"
-            )
-
-            await msg.edit(embed=embed, view=menu)
-
-        @button(
-            label="Main Menu",
-            custom_id="menu",
-            style=ButtonStyle.blurple)
-        async def receive(self, button:Button, interaction:Interaction):
-            embed = Embeds(
-                title=f"{interaction.guild.name}'s Settings",
-                colour=0x000e8a302)
-
-            fields = [
-                ("Changing Comand Prefix",
-                f"Change how users on your server use commands on {self.bot.client.user.name}"),
-                ("Filter setting",
-                f"Change how the filter reacts, if its on and the custom filter"),
-                ("LogChannel",
-                f"Change the log channel that your server uses."),
-                ("Action Channel",
-                 f"Change the action channel for {interaction.guild.name}."),
-                ("Welcome User Message",
-                f"Open the welcome message editor"),
-            ]
-
-            for name, value in fields:
-                embed.add_field(name=name, value=value, inline=False)
-
-            msg: Message = await interaction.response.edit_message(embed=embed, view=self.bot.Main(self.bot))
-
-    class Filter(View):
-        pass
-    class Main(View):
-
-        def __init__(self, bot):
-            super().__init__()
-            self.bot = bot
-
-        @button(
-            label="Prefix",
-            style=ButtonStyle.blurple)
-        async def prefix(self, button: Button, interaction: Interaction):
-
-            """Change your server's prefix to use the bot.
-
-                    Prefix cannot be more then 5 charcters in length
-                    """
-            cur_prefix = bot.guilds_[
-                str(interaction.guild_id)]["prefix"]
-            menu = self.bot.Prefix(self.bot)
-
-            embed = Embeds(
-                title="Prefix Menu",
-                description=f"If you would like to change the prefix please select **Change** below and type the new prefix in this channel. Otherwise click main menu.\n\n`Current Prefix:` **{cur_prefix}**"
-            )
-
-            await interaction.response.edit_message(embed=embed, view=menu)
-        
-        @button(
-            label="Filter",
-            style=ButtonStyle.blurple
-        )
-        async def filter(self, button:Button, interaction:Interaction):
-            pass
-        
-        @button(
-            label="Log Channel",
-            style=ButtonStyle.blurple
-        )
-        async def log(self, button: Button, interaction: Interaction):
-            pass
-        
-        @button(
-            label="Action Channel",
-            style=ButtonStyle.blurple
-        )
-        async def action(self, button: Button, interaction: Interaction):
-            pass
-        
-        @button(
-            label="Manage Welcoming",
-            style=ButtonStyle.blurple
-        )
-        async def welcome(self, button: Button, interaction: Interaction):
-            pass
-        
-        @button(
-            label="Close!",
-            style=ButtonStyle.red
-        )
-        async def close(self, button: Button, interaction: Interaction):
-            embed = Embeds(
-                title=f"{interaction.guild.name}'s Guild Settings",
-                description=f"""Prefix: **{self.bot.client.guilds_[str(interaction.guild.id)]["prefix"]}**
-                Filter On: **{self.bot.client.guilds_[str(interaction.guild.id)]["filter"]}**
-                """,
-                colour=0x000e8a302
-            )
-            
-            await interaction.response.edit_message(embed=embed, view=None)
 
     @command(name="setup")
     async def _setup(self, ctx: context.Context):
@@ -207,7 +62,7 @@ class Settings(Cog):
         for name, value in fields:
             embed.add_field(name=name, value=value, inline=False)
 
-        await ctx.send(embed=embed, view=self.Main(self))
+        await ctx.send(embed=embed, view=self.menu(self))
 
 
 '''
@@ -226,63 +81,6 @@ class Settings(Cog):
         bot.config = APIconfig()
 
         await ctx.send(f'Action Channel set to {new}.')
-
-    @group(name="channel")
-    async def _channels(self, ctx):
-        """Group for editing channel, and settings on your guild
-
-        Commands:
-            remove: Deletes a channel from your guild
-            create: Create a new text channel"""
-        pass
-
-    @_channels.command()
-    async def remove(self, ctx, channelID):
-        """Remove a channel from your server with this command, works with voice or text channels
-
-        Args:
-            channelID : The id of the channel you wish to remove.
-        """
-        channel = ctx.guild.get_channel(int(channelID))
-
-        await channel.delete()
-        await ctx.send(f"Channel named, **{channel}** has been deleted")
-
-    @_channels.command()
-    async def create(self, ctx, channelID):
-        """Remove a channel from your server with this command, works with voice or text channels
-
-        Args:
-            channelID : The id of the channel you wish to remove.
-        """
-
-        await ctx.guild.create_text_channel(name=channelID)
-
-    @_channels.group(name='voice')
-    async def _voice(self, ctx):
-        """A sub group within channels for editing voice channels
-
-        Commands:
-            create: Creates a new voice channel"""
-        pass
-
-    @_voice.command()
-    async def create(self, ctx, *, name):
-        """Create a new voice channel on your server, for text channels use `channels create` command
-        Early development, more features to come.
-
-        Args:
-            name : The name of which you want your channel called
-        """
-
-        await ctx.guild.create_voice_channel(name=name)
-
-    def is_hex(s):
-        try:
-            int(s, 16)
-            return True
-        except ValueError:
-            return False
 
     # Setting WelcomeChannel
     @_setup.group(name="welcome")
