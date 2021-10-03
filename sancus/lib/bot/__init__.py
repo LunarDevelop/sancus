@@ -5,6 +5,9 @@ from discord import Intents
 from discord.ext.commands import Bot as BaseBot
 from discord.ext import commands
 
+# interactions imports
+import discord_interactions as interactions
+
 # Websocket Import
 from lib.bot.websocket import *
 
@@ -77,7 +80,6 @@ class Bot(BaseBot):
             self.TOKEN = self.config_['token']
 
         print(colours.GREEN, "STARTING BOT", colours.ENDC)
-
         # Begins connection to discord
         super().__init__(get_prefix, help_command=None,
                          description=self.description, owner_ids=OWNER_IDS, intents=intents)
