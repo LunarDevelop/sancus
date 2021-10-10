@@ -229,7 +229,7 @@ class main():
             row=0)
         async def recieve(self, button: Button, interaction: Interaction):
             while True:
-                cur_prefix = self.bot.guilds_[
+                cur_prefix = self.bot.client.guilds_[
                     str(interaction.guild.id)]["prefix"]
                 embed = Embeds(
                     title="Change Prefix",
