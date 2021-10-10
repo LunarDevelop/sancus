@@ -1,3 +1,5 @@
+from typing import Optional, Union
+import json
 from discord import Embed
 import datetime
 from typing import Optional, TypeVar, Union, Any
@@ -42,11 +44,13 @@ class guildObject():
                  welcomeMessage: bool = False,
                  welcomeType: bool = False,  # False means text based # True means banner style
                  welcomeChannel: Optional[int] = None,
-                 welcomeBack: Optional[str] = "00ff00",
-                 welcomeImage: Union[bool, str] = False,
+                 welcomeText: Optional[str] = "Welcome {user} to {server} server",
+                 welcomeBack: Optional[str] = "#00ff00",
                  welcomeBanner: Optional[str] = None,
                  welcomeIcon: Optional[str] = None,
-                 welcomeTxtColor: str = "000000"
+                 welcomeTxtColor: str = "#000000",
+                 welcomeUserColor: str = "#000000",
+                 welcomeMembersColor: str = "#000000",
                  ) -> None:
 
         self.id = id
@@ -59,11 +63,14 @@ class guildObject():
         self.welcomeMessage = welcomeMessage
         self.welcomeType = welcomeType
         self.welcomeChannel = welcomeChannel
+        self.welcomeText = welcomeText
         self.welcomeBack = welcomeBack
-        self.welcomeImage = welcomeImage
         self.welcomeBanner = welcomeBanner
         self.welcomeIcon = welcomeIcon
         self.welcomeTxtColor = welcomeTxtColor
+        self.welcomeUserColor = welcomeUserColor
+        self.welcomeMembersColor = welcomeMembersColor
+
 
 class userObject():
     
