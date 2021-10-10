@@ -4,6 +4,8 @@ from typing import Optional
 
 import json
 
+from functions.objects import Embeds
+
 
 class Info(commands.Cog):
 
@@ -12,9 +14,9 @@ class Info(commands.Cog):
 
     @commands.command(name="userinfo", aliases=['ui'], brief="Displays a speific user's info")
     async def user_info(self, ctx, *, User: Optional[discord.Member]):
-        user = User or ctx.author
+        user : discord.Member = User or ctx.author
 
-        embed = discord.Embed(
+        embed = Embeds(
             title="User Info",
             colour=user.colour
         )
@@ -33,7 +35,6 @@ class Info(commands.Cog):
             ("Display Name: ", user.display_name, True),
             ("Is Bot: ", user.bot, True),
             ("UserName: ", f"{user.name}#{user.discriminator}", False),
-            # CURRENTLY BROKEN ("Status: ", user.status, True),
             ("Roles: ", rolesUser, False),
             ("Account Created: ", user.created_at, True),
             ("Joined This Server: ", user.joined_at, True),
@@ -46,8 +47,8 @@ class Info(commands.Cog):
 
     @commands.command(name="serverinfo", aliases=['si'])
     async def server_info(self, ctx):
-        server = ctx.guild
-        embed = discord.Embed(
+        server : discord.Guild = ctx.guild
+        embed = Embeds(
             title="Server Info",
             colour=0x6666FF
         )
@@ -55,7 +56,10 @@ class Info(commands.Cog):
         fields = [
             ("Server Name: ", server.name, True),
             ("Server ID: ", server.id, True),
-            ("Total Members: ", server.member_count, True)
+            ("Total Members: ", server.member_count, True),
+            ("AFK Channel: ", server.afk_channel, True),
+            ("AFK Timeout: ", server.afk_timeout, True),
+            
         ]
 
         for name, value, inline in fields:
