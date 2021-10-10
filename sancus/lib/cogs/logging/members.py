@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import json
 import discord
 import io
 import requests
@@ -17,7 +18,7 @@ class Members(Cog):
 
     # When Player joins message
     @Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member : discord.Member):
         guild = member.guild
 
         total_users = guild.member_count
@@ -42,7 +43,73 @@ class Members(Cog):
 
         except:
             pass
+        
+        #Welcome message
+        if self.client.guilds_[str(guild.id)]["welcomeMessage"]:
+            try:
+                cur_channel :discord.TextChannel = await self.client.fetch_channel(self.client.guilds_[
+                    str(guild.id)]["welcomeChannel"])
+            except:
+                return
+            
+            cur_bg = self.client.guilds_[
+                str(guild.id)]["welcomeBack"]
+            cur_banner = self.client.guilds_[
+                str(guild.id)]["welcomeBanner"]
+            cur_icon = self.client.guilds_[
+                str(guild.id)]["welcomeIcon"]
+            cur_colour_txt = self.client.guilds_[
+                str(guild.id)]["welcomeTxtColor"]
+            cur_colour_user = self.client.guilds_[
+                str(guild.id)]["welcomeUserColor"]
+            cur_colour_members = self.client.guilds_[
+                str(guild.id)]["welcomeMembersColor"]
+            
+            cur_text: str = self.client.guilds_[
+                str(guild.id)]["welcomeText"]
+            
+            if self.client.guilds_[
+                str(guild.id)]["welcomeType"]:
+                
+                api_ini = "sancus/data/api.ini"
 
+                api_data = ConfigParser()
+                with open(api_ini) as f:
+                    api_data.read_file(f)
+
+                headers = {
+                    "Authorization": api_data["FluxPoint"]["api_token"]
+                }
+
+                data = {
+                    "username": f"{member.name}#{member.discriminator}",
+                    "avatar": member.avatar.url,
+                    "background": f"#{cur_bg}",
+                    "members": f"member #{total_users}",
+                    "icon": cur_icon,
+                    "banner": cur_banner,
+                    "color_welcome": f"#{cur_colour_txt}",
+                    "color_username": f"#{cur_colour_user}",
+                    "color_members": f"#{cur_colour_members}",
+                }
+                print(json.dumps(data))
+
+                request = requests.get(
+                    "https://api.fluxpoint.dev/gen/welcome", headers=headers, json=data)
+
+                image = io.BytesIO(request.content)
+                file = discord.File(image, filename="image.png")
+
+                await cur_channel.send(file=file)
+                
+            else:
+                user = member.name
+                server = guild.name
+
+                cur_text = cur_text.format(user=user, server=server)
+
+                await cur_channel.send(cur_text)
+        
     # When Player leaves message
     @Cog.listener()
     async def on_member_remove(self, member):
