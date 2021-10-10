@@ -131,7 +131,10 @@ class Members(Cog):
         userleft.set_footer(text=self.client.embedAuthorName,
                             icon_url=self.client.embedAuthorUrl)
 
-        await channel.send(embed=userleft)
+        try:
+            await channel.send(embed=userleft)
+        except:
+            return
 
     # If nickname changes
     @Cog.listener()
@@ -151,4 +154,7 @@ class Members(Cog):
             embed.set_footer(text=self.client.embedAuthorName,
                              icon_url=self.client.embedAuthorUrl)
 
-            await channel.send(embed=embed)
+            try:
+                await channel.send(embed=embed)
+            except:
+                return
