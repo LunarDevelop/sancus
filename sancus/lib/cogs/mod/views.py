@@ -1,6 +1,8 @@
 from configparser import ConfigParser
 import io
+import json
 import discord
+from discord import reaction
 from discord.enums import ButtonStyle
 from discord.errors import NotFound
 from discord.message import Attachment, Message
@@ -978,24 +980,27 @@ class main():
             data = {
                 "username": f"{interaction.user.name}#{interaction.user.discriminator}",
                 "avatar": interaction.user.avatar.url,
-                "background": "#000000",
+                "background": f"#{cur_bg}",
                 "members": "member #1",
                 "icon": cur_icon,
                 "banner": cur_banner,
-                "color_welcome": "#000000",
-                "color_username": "#000000",
-                "color_members": "#000000",
+                "color_welcome": f"#{cur_colour_txt}",
+                "color_username": f"#{cur_colour_user}",
+                "color_members": f"#{cur_colour_members}",
             }
             
             request = requests.get("https://api.fluxpoint.dev/gen/welcome", headers=headers, json=data)
             
-            image = io.BytesIO(request.content)
-            file = discord.File(image, filename="image.png")
-            
-            embed = Embeds()
-            embed.set_image(url="attachment://image.png")
-                        
-            await interaction.channel.send(file=file, embed=embed, delete_after=10)
+            if request.ok:
+                image = io.BytesIO(request.content)
+                file = discord.File(image, filename="image.png")
+                
+                embed = Embeds()
+                embed.set_image(url="attachment://image.png")
+                            
+                await interaction.channel.send(file=file, embed=embed, delete_after=10)
+            else:
+                await interaction.channel.send(json.loads(request.content)["message"])
             
         
         @button(
@@ -1116,9 +1121,9 @@ class main():
             self.bot.client.guilds_ = self.bot.client.config.get_config_guilds()
             await welcomeEmbed(self, button, interaction)
 
-        @button(
+        """@button(
             label="Color Menu",
             style=ButtonStyle.green,
-            row=2)
+            row=2, disabled=True)
         async def colour(self, button: Button, interaction: Interaction):
-            pass
+            pass"""
