@@ -224,7 +224,7 @@ class Bot(BaseBot):
         self.crossEmoji = self.get_emoji(872992645302075392)
 
     def getGuild(self, id):
-        if id in self.guilds_:
+        if str(id) in self.guilds_:
             return self.guilds_[str(id)]
 
     async def getLogChannel(self, id):
