@@ -41,8 +41,9 @@ class Owner(
         self.forward_arrow = self.client.get_emoji(880261496167358484)
 
     @command()
-    async def systemUpdate(self, ctx, x :str = "guilds"):
+    async def systemUpdate(self, ctx, x :str = "all"):
         async def guilds():
+            self.client.guilds_ = self.client.config.get_config_guilds()
             for guild in self.client.guilds_:
                 data = guildObject(**self.client.guilds_.get(guild))
                 self.client.config.put_config_guild(int(guild), data.__dict__)
@@ -51,10 +52,11 @@ class Owner(
             await ctx.send("Guild Sys update done!")
         
         async def users():
+            self.client.users_ = self.client.config.get_config_users()
             for user in self.client.users_:
                 data = userObject(**self.client.users_.get(user))
                 self.client.config.put_config_user(int(user), data.__dict__)
-            self.client.guilds_ = self.client.config.get_config_guilds()
+            self.client.guilds_ = self.client.config.get_config_users()
             await ctx.send("User Sys update done")
             
         if x.lower() == "all":
