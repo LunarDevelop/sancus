@@ -1,6 +1,8 @@
 import asyncio
 from asyncio.tasks import sleep
 from datetime import datetime
+
+import websockets
 from .admin_slash import admin_slash
 from discord.client import Client
 
@@ -28,6 +30,14 @@ from lib.bot import Bot
 ###
 COGS = [path.split("\\")[-1][:-3] for path in glob("sancus/lib/cogs/**/*.py")]
 
+config = ConfigParser()
+
+with open("sancus/data/api.ini") as file:
+    config.read_file(file)
+
+uri = config["WebSocket"]["uri"]
+botName = "sancus"
+
 class Owner(
         Mail,
         admin_slash,
@@ -39,8 +49,30 @@ class Owner(
 
         self.back_arrow = self.client.get_emoji(880261491587166229)
         self.forward_arrow = self.client.get_emoji(880261496167358484)
-
+        
     @command()
+    @is_owner()
+    async def uptime(self, ctx):
+        data = {
+            "type":"10",
+            "data": {
+                "botName": botName
+            }
+        }
+        async with websockets.connect(uri) as websocket:
+            message = json.dumps(data)
+
+            await websocket.send(str(message))
+
+            uptime : str = await websocket.recv()
+            
+        uptime = uptime.replace("'", '"')
+        uptime = json.loads(uptime)
+        
+        await ctx.send(f'Uptime of Sancus is {uptime["data"]["uptime"]}')
+            
+    @command()
+    @is_owner()
     async def systemUpdate(self, ctx, x :str = "all"):
         async def guilds():
             self.client.guilds_ = self.client.config.get_config_guilds()
@@ -70,6 +102,7 @@ class Owner(
             await users()
 
     @command()
+    @is_owner()
     async def test(self, ctx):
         reaction, user = await self.client.wait_for("reaction_add")
         await ctx.send(embed=Embed(
