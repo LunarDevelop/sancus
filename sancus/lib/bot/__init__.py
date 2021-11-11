@@ -5,8 +5,6 @@ from discord import Intents
 from discord.ext.commands import Bot as BaseBot
 from discord.ext import commands
 
-# interactions imports
-import discord_interactions as interactions
 
 # Websocket Import
 from lib.bot.websocket import *
@@ -20,7 +18,6 @@ from functions.objects import *
 # general imports
 from glob import glob
 from configparser import ConfigParser, NoSectionError, NoOptionError
-import schedule
 import time
 import string
 
@@ -205,8 +202,6 @@ class Bot(BaseBot):
 
 # On Message to process commands
     async def on_message(self, message):
-        # Makes sure any scheduled tasks are run on any message sent
-        schedule.run_pending()
 
         # If message is not by a bot then process command (if it is a command)
         if not message.author.bot:

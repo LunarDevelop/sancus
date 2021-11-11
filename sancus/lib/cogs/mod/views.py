@@ -83,6 +83,52 @@ async def welcomeEmbed(self, button: Button, interaction: Interaction):
         )
         await interaction.message.edit(embed=embed, view=self.bot.welcomeText(self.bot))
 
+async def logEmbed(self, button: Button, interaction: Interaction):
+    try:
+        log = await self.bot.client.fetch_channel(int(self.bot.client.guilds_[
+            str(interaction.guild_id)]["logChannel"]))
+    except:
+        log = None
+    
+    try:
+        auto = await self.bot.client.fetch_channel(int(self.bot.client.guilds_[
+            str(interaction.guild_id)]["autoLogChannel"]))
+    except:
+        auto = "Disabled"
+
+    try:
+        case = await self.bot.client.fetch_channel(int(self.bot.client.guilds_[
+            str(interaction.guild_id)]["caseChannel"]))
+    except:
+        case = "Disabled"
+
+    try:
+        ModCmdLog = await self.bot.client.fetch_channel(int(self.bot.client.guilds_[
+            str(interaction.guild_id)]["modCmdChannel"]))
+    except:
+        ModCmdLog = "Disabled"
+
+    
+
+    return Embeds(
+                title="Log Channel Menu",
+                description=f"""Change the settings of your log channel.
+
+                ```The log channel is the default channel, 
+
+If you change any of the other log methods then they will use that channel.
+
+You can always turn off the separate log channel by changing it to 0```
+            
+                **Log Channel:** {log.mention}
+                
+                **Case Log Channel:** 
+                **Mod Command Log Channel:** 
+                **Auto Mod Log Channel:**
+                **Nickname Log Channel:**
+                """
+            )
+
 
 class main():
     class menu(View):
@@ -139,18 +185,14 @@ class main():
         async def log(self, button: Button, interaction: Interaction):
             if self.bot.client.guilds_[
                     str(interaction.guild_id)]["logChannel"] != None:
-                cur_channel = await self.bot.client.fetch_channel(int(self.bot.client.guilds_[
+                try:
+                    cur_channel = await self.bot.client.fetch_channel(int(self.bot.client.guilds_[
                     str(interaction.guild_id)]["logChannel"]))
+                except:cur_channel = None
             else:
                 cur_channel = None
 
-            embed = Embeds(
-                title="Log Channel Menu",
-                description=f"""Change the settings of your log channel.
-                    
-                    Log Channel: {cur_channel}
-                    """
-            )
+            embed = await logEmbed(self, button, interaction)
 
             await interaction.response.edit_message(embed=embed, view=self.bot.log(self.bot))
 
@@ -587,13 +629,7 @@ class main():
             else:
                 cur_channel = None
 
-            embed = Embeds(
-                title="Log Channel Menu",
-                description=f"""Change the settings of your log channel.
-                
-                Log Channel: {cur_channel}
-                """
-            )
+            embed = await logEmbed(self, button, interaction)
 
             await message.edit(embed=embed, view=self.bot.log(self.bot))
 

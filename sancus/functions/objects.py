@@ -40,6 +40,10 @@ class guildObject():
                  filterDelete: bool = True,
                  filterWords: Optional[list] = None,
                  logChannel: Optional[int] = None,
+                 caseChannel: Optional[int] = None,
+                 modCmdChannel: Optional[int] = None,
+                 nicknameChannel: Optional[int] = None,
+                 autoModChannel: Optional[int] = None,
                  actionChannel: Optional[int] = None,
                  welcomeMessage: bool = False,
                  welcomeType: bool = False,  # False means text based # True means banner style

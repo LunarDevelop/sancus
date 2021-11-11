@@ -1,4 +1,8 @@
 from configparser import ConfigParser
+import sys, os
+
+sys.path.insert(0, os.path.join(os.getcwd(), "sancus"))
+
 from functions.objects import guildObject, userObject, reactObject
 
 import requests
