@@ -53,7 +53,7 @@ async def ping():
 
         await websocket.send(str(pinging))
 
-        greeting = await websocket.recv()
+        return await websocket.recv()
 
 
 async def heartbeat(client):
