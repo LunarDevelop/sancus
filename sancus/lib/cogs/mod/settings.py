@@ -38,6 +38,7 @@ class Settings(main,Cog):
         self.client = client
 
     @command(name="setup")
+    @has_permissions(manage_messages=True)
     async def _setup(self, ctx: context.Context):
         embed = Embeds(
             title=f"{ctx.guild.name}'s Settings",
