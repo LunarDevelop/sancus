@@ -178,7 +178,7 @@ class Owner(
         def chunker_list(seq, size):
             return (seq[i::size] for i in range(size))
 
-        """class page(discord.ui.View):
+        class page(discord.ui.View):
 
             def __init__(self):
                 super.__init__()
@@ -196,45 +196,18 @@ class Owner(
             servers.append(server.name)
             serverIDS.append(server.id)
 
-        if (len(self.client.guilds) / 10) > 1:
+        
+        embed = Embed(
+            title="Servers List",
+            description=f"Amount of servers = {len(self.client.guilds)}",
+            colour=0x990099
+        )
 
-            size = (len(self.client.guilds) // 1) + 1
+        for i in range(0, (len(servers))):
+            embed.add_field(
+                name=servers[i], value=serverIDS[i], inline=True)
 
-            pageServers = chunker_list(servers, size)
-            pageIDs = chunker_list(serverIDS, size)
-
-            pageNumber = 0
-
-            embed = Embed(
-                title="Servers List",
-                description=f"Amount of servers = {len(self.client.guilds)}",
-                colour=0x990099
-            )
-
-            for i in range(0, (len(pageServers[0])+1)):
-                embed.add_field(name=pageServers[0][i], value=pageIDs[0][i], inline=True)
-
-            def next():
-                pageNumber += 1
-                
-                embed.remove_field(0)
-                
-                for i in range(0, (len(pageServers[pageNumber]))):
-                    embed.add_field(
-                        name=pageServers[pageNumber][i], value=pageIDs[pageNumber][i], inline=True)
-
-        else:
-            embed = Embed(
-                title="Servers List",
-                description=f"Amount of servers = {len(self.client.guilds)}",
-                colour=0x990099
-            )
-
-            for i in range(0, (len(servers))):
-                embed.add_field(
-                    name=servers[i], value=serverIDS[i], inline=True)
-
-        await ctx.send(embed=embed)"""
+        await ctx.send(embed=embed)
 
 # Commands
     @Cog.listener()
