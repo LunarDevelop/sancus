@@ -26,11 +26,6 @@ PREFIX = 's!'
 OWNER_IDS = [268035643760836608, 801557845928706139]
 TESTING_MODE = True
 
-__Config__ = ConfigParser()
-
-with open("sancus/data/config.ini", "r") as f:
-    __Config__.read_file(f)
-
 
 class Bot(BaseBot):
 
@@ -98,9 +93,7 @@ class Bot(BaseBot):
 # COGS system to load all cogs aside from help (loaded separately)
         for cog in COGS:
             cogs = [cog.split("/")[-1]]
-            cogsList = __Config__.get('DEFAULT', 'COGS')
-            cogsList = cogsList.strip("[] ,")
-            cogsList = cogsList.split(" , ")
+            cogsList = [ "anime" , "economy" , "errors" , "filter" , "games" , "logging" , "meta" , "misc" , "mod" , "owner" , "services" , "stats"]
 
             if cogs[0] == '__init__':
                 pass
