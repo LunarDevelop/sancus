@@ -246,7 +246,7 @@ class Mod(
 
     @command()
     @has_permissions(manage_messages=True)
-    async def warning(self, ctx, user: discord.Member, *, reason=None):
+    async def warn(self, ctx, user: discord.Member, *, reason=None):
         """Warn a user
 
         Args:
