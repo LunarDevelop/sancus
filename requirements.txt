@@ -3,3 +3,4 @@ requests
 validators
 websockets
 requests
+pytest

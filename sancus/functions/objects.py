@@ -63,6 +63,10 @@ class guildObject():
         self.filterDelete = filterDelete
         self.filterWords = filterWords
         self.logChannel = logChannel
+        self.caseChannel = caseChannel
+        self.modCmdChannel = modCmdChannel
+        self.nicknameChannel = nicknameChannel
+        self.autoModChannel = autoModChannel
         self.actionChannel = actionChannel
         self.welcomeMessage = welcomeMessage
         self.welcomeType = welcomeType

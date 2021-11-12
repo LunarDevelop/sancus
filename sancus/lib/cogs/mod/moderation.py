@@ -12,7 +12,7 @@ class antispam(Cog):
         
     @Cog.listener()
     async def on_message(self, msg:Message):
-        if not msg.author.bot and msg.author:
+        if not msg.author.bot:
             mentionList = msg.mentions + msg.role_mentions
             
             if len(mentionList) > 5:
