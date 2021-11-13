@@ -10,7 +10,7 @@ from lib.bot import bot
 from .settings import Settings
 from .moderation import antispam
 
-from functions.objects import warningObject
+from functions.objects import Embeds, warningObject
 
 
 class Mod(
