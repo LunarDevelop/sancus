@@ -5,6 +5,12 @@ import json
 from functions.consoleColours import *
 from configparser import ConfigParser
 
+import sys, os
+
+try:
+    sys.path.insert(0, os.path.join(os.getcwd(),"sancus"))
+except:pass
+
 config = ConfigParser()
 
 with open("sancus/data/api.ini") as file:
