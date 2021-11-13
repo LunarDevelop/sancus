@@ -79,8 +79,14 @@ class Owner(
             self.client.guilds_ = self.client.config.get_config_guilds()
             for guild in self.client.guilds_:
                 try:
-                    data = guildObject(**self.client.guilds_.get(guild))
-                    self.client.config.put_config_guild(int(guild), data.__dict__)
+                    data = self.client.guilds_.get(guild)
+                    newdata = {}
+                    for key in data:
+                        if data.get(key) != None:
+                            newdata[key] = data.get(key)
+
+                    newdata = guildObject(**newdata).__dict__
+                    self.client.config.put_config_guild(int(guild), newdata)
                 except TypeError:
                     pass
                 
@@ -91,8 +97,15 @@ class Owner(
             self.client.users_ = self.client.config.get_config_users()
             for user in self.client.users_:
                 try:
-                    data = userObject(**self.client.users_.get(user))
-                    self.client.config.put_config_user(int(user), data.__dict__)
+                    data = self.client.users_.get(user)
+
+                    newdata = {}
+                    for key in data:
+                        if data.get(key) != None:
+                            newdata[key] = data.get(key)
+
+                    newdata = userObject(**newdata).__dict__
+                    self.client.config.put_config_user(int(user),newdata)
                 except TypeError:
                     pass
                 
