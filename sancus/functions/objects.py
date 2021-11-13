@@ -31,10 +31,12 @@ class Embeds(Embed):
         self._footer['icon_url'] = "https://cdn.discordapp.com/attachments/789247201678327838/879862055404965938/stage_1629845776.jpeg"
 
 class Warning():
-    username : str
-    id : int
-    reason : Optional[str]
-    date : datetime.datetime
+    
+    def __init__(self, *args, **kwargs) -> None:
+        self.username : str = kwargs["username"]
+        self.id : int = kwargs["id"]
+        self.reason : Optional[str] = kwargs["reason"]
+        self.date : datetime.datetime = kwargs["date"]
 
 class guildObject():
 
