@@ -1,18 +1,16 @@
-from discord import colour
+
 import discord
 from discord.embeds import Embed
 from discord.ext.commands import command, Cog, Context, has_permissions
 
-import asyncio
 from datetime import datetime
-
-import validators
-from time import sleep
 
 from lib.bot import bot
 
 from .settings import Settings
 from .moderation import antispam
+
+from functions.objects import warningObject
 
 
 class Mod(
@@ -21,7 +19,7 @@ class Mod(
         Cog):
 
     def __init__(self, client):
-        self.client = client
+        self.client :bot = client
 
     # Clear command
     @command()
@@ -246,7 +244,7 @@ class Mod(
 
     @command()
     @has_permissions(manage_messages=True)
-    async def warn(self, ctx, user: discord.Member, *, reason=None):
+    async def warn(self, ctx:Context, user: discord.Member, *, reason=None):
         """Warn a user
 
         Args:
@@ -254,10 +252,11 @@ class Mod(
         Member : Tag the member or member id to send them a dm warning.
         Reason : the reason for the warning.
         """
+        #Direct Warning
         embed = Embed(
             title=f"Warning from {ctx.guild.name}",
             description=f"Reason:\n{reason}",
-            timestamp=datetime.utcnow()
+            timestamp=ctx.message.created_at
         )
         embed.set_footer(text=self.client.embedAuthorName,
                          icon_url=self.client.embedAuthorUrl)
@@ -265,21 +264,34 @@ class Mod(
         await user.send(embed=embed)
         await ctx.send(f"{user.mention} has been warned")
 
+        #Case message
         embed = discord.Embed(
             title=f'{user.name} has been warned',
             description=f'Reason: {reason}',
-            timestamp=datetime.utcnow()
+            timestamp=ctx.message.created_at
         )
 
         embed.set_footer(text=self.client.embedAuthorName,
                          icon_url=self.client.embedAuthorUrl)
 
         try:
-            channel = await self.client.getActionChannel(ctx.guild.id)
+            channel = await self.client.getCaseChannel(ctx.guild.id)
             await channel.send(embed=embed)
 
         except:
             pass
+        
+        #Updating warnings on DB
+        warning = warningObject(
+            username=user.name,
+            id=user.id,
+            reason=reason,
+            date=ctx.message.created_at.strftime("%d/%m/%y %I:%M:%S%p %Z")
+        )
+        warnings = self.client.guilds_[str(ctx.guild.id)]["warnings"]
+        warnings.append(warning.__dict__)
+
+        self.client.config.put_config_guild(ctx.guild.id, {"warnings":warnings})
     
     @command()
     @has_permissions(manage_messages=True)
@@ -287,8 +299,7 @@ class Mod(
         """Display all warning messages, 
         TODO this will eventually be able to show warnings between a certain date
         """
-        pass
-    
+
     # Show Avatar of a Player
     @command()
     @has_permissions(manage_messages=True)
