@@ -19,7 +19,7 @@ class Connections(unittest.TestCase):
             "date":date
         }
 
-        warningObj = Warning(
+        warningObj = warningObject(
             username="Solar",
             id= 4040404,
             reason= "test",
@@ -38,7 +38,7 @@ class Connections(unittest.TestCase):
             "date":date
         }
 
-        warningObj = Warning(
+        warningObj = warningObject(
             username="Solar",
             id= "a4040404",
             reason= "test",
