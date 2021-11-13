@@ -30,6 +30,10 @@ class Embeds(Embed):
         self._footer['text'] = "Lunar Development"
         self._footer['icon_url'] = "https://cdn.discordapp.com/attachments/789247201678327838/879862055404965938/stage_1629845776.jpeg"
 
+class warning():
+    username : str
+    reason : Optional[str]
+    date : datetime.datetime
 
 class guildObject():
 
@@ -44,7 +48,7 @@ class guildObject():
                  modCmdChannel: Optional[int] = None,
                  nicknameChannel: Optional[int] = None,
                  autoModChannel: Optional[int] = None,
-                 actionChannel: Optional[int] = None,
+                 warnings : Optional[list] = None,               
                  welcomeMessage: bool = False,
                  welcomeType: bool = False,  # False means text based # True means banner style
                  welcomeChannel: Optional[int] = None,
@@ -67,7 +71,7 @@ class guildObject():
         self.modCmdChannel = modCmdChannel
         self.nicknameChannel = nicknameChannel
         self.autoModChannel = autoModChannel
-        self.actionChannel = actionChannel
+        self.warnings = warnings
         self.welcomeMessage = welcomeMessage
         self.welcomeType = welcomeType
         self.welcomeChannel = welcomeChannel
