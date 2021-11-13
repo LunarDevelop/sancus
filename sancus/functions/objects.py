@@ -32,6 +32,7 @@ class Embeds(Embed):
 
 class Warning():
     username : str
+    id : int
     reason : Optional[str]
     date : datetime.datetime
 
