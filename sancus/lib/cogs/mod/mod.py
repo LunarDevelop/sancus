@@ -295,10 +295,22 @@ class Mod(
     
     @command()
     @has_permissions(manage_messages=True)
-    async def warnings(self, ctx :Context , user: discord.Member):
+    async def warnings(self, ctx :Context):
         """Display all warning messages, 
         TODO this will eventually be able to show warnings between a certain date
         """
+        embed = Embeds(
+            title="List of warnings issued",
+            description="All of the warnings that have been issued on this server"
+        )
+
+        for warning in self.client.guilds_[str(ctx.guild.id)]["warnings"]:
+            embed.add_field(
+                name=f"{warning['username']} Report's",
+                value=f"Reason: {warning['reason']}\nDate and time: {warning['date']}"
+            )
+
+        await ctx.send(embed=embed)
 
     # Show Avatar of a Player
     @command()
