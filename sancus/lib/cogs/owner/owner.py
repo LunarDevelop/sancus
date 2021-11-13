@@ -1,6 +1,7 @@
 import asyncio
 from asyncio.tasks import sleep
 from datetime import datetime
+from typing import Type
 
 import websockets
 from .admin_slash import admin_slash
@@ -77,8 +78,11 @@ class Owner(
         async def guilds():
             self.client.guilds_ = self.client.config.get_config_guilds()
             for guild in self.client.guilds_:
-                data = guildObject(**self.client.guilds_.get(guild))
-                self.client.config.put_config_guild(int(guild), data.__dict__)
+                try:
+                    data = guildObject(**self.client.guilds_.get(guild))
+                    self.client.config.put_config_guild(int(guild), data.__dict__)
+                except TypeError:
+                    pass
                 
             self.client.guilds_ = self.client.config.get_config_guilds()
             await ctx.send("Guild Sys update done!")
@@ -86,8 +90,12 @@ class Owner(
         async def users():
             self.client.users_ = self.client.config.get_config_users()
             for user in self.client.users_:
-                data = userObject(**self.client.users_.get(user))
-                self.client.config.put_config_user(int(user), data.__dict__)
+                try:
+                    data = userObject(**self.client.users_.get(user))
+                    self.client.config.put_config_user(int(user), data.__dict__)
+                except TypeError:
+                    pass
+                
             self.client.guilds_ = self.client.config.get_config_users()
             await ctx.send("User Sys update done")
             
