@@ -9,7 +9,7 @@ from sancus.functions.objects import *
 
 class Connections(unittest.TestCase):
 
-    def test_warning(self):
+    def test_warning_correct(self):
         date = datetime.datetime.utcnow()
 
         warningData = {
@@ -22,6 +22,25 @@ class Connections(unittest.TestCase):
         warningObj = Warning(
             username="Solar",
             id= 4040404,
+            reason= "test",
+            date=date
+        )
+
+        self.assertEqual(warningObj.__dict__, warningData, "Warning Object Is Not Working Correctly")
+
+    def test_warning_id_str(self):
+        date = datetime.datetime.utcnow()
+
+        warningData = {
+            "username":"Solar",
+            "id":"a4040404",
+            "reason":"test",
+            "date":date
+        }
+
+        warningObj = Warning(
+            username="Solar",
+            id= "a4040404",
             reason= "test",
             date=date
         )
