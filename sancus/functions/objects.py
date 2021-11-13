@@ -30,7 +30,7 @@ class Embeds(Embed):
         self._footer['text'] = "Lunar Development"
         self._footer['icon_url'] = "https://cdn.discordapp.com/attachments/789247201678327838/879862055404965938/stage_1629845776.jpeg"
 
-class warning():
+class Warning():
     username : str
     reason : Optional[str]
     date : datetime.datetime
