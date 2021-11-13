@@ -1,7 +1,7 @@
 from discord import colour
 import discord
 from discord.embeds import Embed
-from discord.ext.commands import command, Cog, has_permissions
+from discord.ext.commands import command, Cog, Context, has_permissions
 
 import asyncio
 from datetime import datetime
@@ -280,7 +280,15 @@ class Mod(
 
         except:
             pass
-
+    
+    @command()
+    @has_permissions(manage_messages=True)
+    async def warnings(self, ctx :Context , user: discord.Member):
+        """Display all warning messages, 
+        TODO this will eventually be able to show warnings between a certain date
+        """
+        pass
+    
     # Show Avatar of a Player
     @command()
     @has_permissions(manage_messages=True)
