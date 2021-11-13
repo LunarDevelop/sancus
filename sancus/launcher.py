@@ -5,9 +5,8 @@ import configparser
 
 import sys, os
 
-try:
-    sys.path.insert(0, os.path.join(os.getcwd(),"sancus"))
-except:pass
+sys.path.append(os.path.join(os.getcwd(),"sancus"))
+sys.path.append(os.getcwd())
 
 from functions.consoleColours import *
 

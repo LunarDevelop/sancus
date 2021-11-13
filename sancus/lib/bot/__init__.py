@@ -17,9 +17,12 @@ from functions.objects import *
 
 # general imports
 from glob import glob
-from configparser import ConfigParser, NoSectionError, NoOptionError
-import time
 import string
+
+import sys, os
+
+sys.path.append(os.path.join(os.getcwd(),"sancus"))
+sys.path.append(os.getcwd())
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("sancus/lib/cogs/**/*.py")]
 PREFIX = 's!'
