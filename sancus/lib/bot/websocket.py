@@ -13,7 +13,7 @@ except:pass
 
 config = ConfigParser()
 
-with open("sancus/data/api.ini") as file:
+with open(sys.path[0] + '/data/api.ini') as file:
     config.read_file(file)
 
 uri = config["WebSocket"]["uri"]
