@@ -37,7 +37,6 @@ with open("sancus/data/api.ini") as file:
     config.read_file(file)
 
 uri = config["WebSocket"]["uri"]
-botName = "sancus"
 
 class Owner(
         Mail,
@@ -50,6 +49,11 @@ class Owner(
 
         self.back_arrow = self.client.get_emoji(880261491587166229)
         self.forward_arrow = self.client.get_emoji(880261496167358484)
+
+    @command()
+    @is_owner()
+    async def shards(self, ctx):#Add an embed system to this command to display shard info
+        await ctx.send(self.client.shard_count)
         
     @command()
     @is_owner()
@@ -57,7 +61,7 @@ class Owner(
         data = {
             "type":"10",
             "data": {
-                "botName": botName
+                "botName": self.client.user.name
             }
         }
         async with websockets.connect(uri) as websocket:

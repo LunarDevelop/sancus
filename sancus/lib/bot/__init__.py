@@ -2,7 +2,7 @@
 from asyncio.tasks import sleep
 from os import read, sys, system
 from discord import Intents
-from discord.ext.commands import Bot as BaseBot
+from discord.ext.commands import AutoShardedBot as BaseBot
 from discord.ext import commands
 
 
