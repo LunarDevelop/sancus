@@ -22,6 +22,47 @@ class reporting():
         try:
             caseChannel = await ctx.guild.fetch_channel(int(caseChannel))
         except TypeError:
+            return "Cases aren't setup", None
+
+        if len(guild["warnings"]) == 0:
+
+            embed = Embeds(
+                title=f"Case #1 | {type.upper()}",
+                description=message,
+                colour=0x0002C2F33
+            )
+
+            return 1, (await caseChannel.send(embed=embed)).jump_url
+        
+        last_warning_num = guild["warnings"][-1]["case_num"]
+        case_num = last_warning_num + 1
+
+        embed = Embeds(
+            title=f"Case #{case_num} | {type.upper()}",
+            description=message,
+            color=0x0002C2F33
+        )
+
+        return case_num, (await caseChannel.send(embed=embed)).jump_url
+
+    async def modReport(self, ctx, type, message, user=None):
+        """This will detect if there is a case already reported and get the number for the next report
+        
+        self -> the bot itself
+        ctx -> context of the report, so can send a message to the guild if need.
+        type -> the type of report you are sending
+        message -> the message for the case report
+        user -> the moderator that execured the command
+        
+        returns ->
+                    case number -> so can send to the user and reply to the user who made the case
+                    message link -> so can automatically be direct to the channel"""
+
+        guild = self.guilds_[str(ctx.guild.id)]
+        caseChannel = guild["modCmdChannel"]
+        try:
+            caseChannel = await ctx.guild.fetch_channel(int(caseChannel))
+        except TypeError:
             return None
 
         id = caseChannel.last_message_id
