@@ -36,6 +36,7 @@ class warningObject():
         self.username : str = kwargs["username"]
         self.id : int = kwargs["id"]
         self.reason : Optional[str] = kwargs["reason"]
+        self.case_num : int = kwargs["case_num"]
         self.date : datetime.datetime = kwargs["date"]
 
 class guildObject():
