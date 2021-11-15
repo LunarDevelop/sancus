@@ -15,6 +15,8 @@ from functions.consoleColours import colours
 import functions.exceptions as exceptions
 from functions.objects import *
 
+from .botReports import reporting
+
 # general imports
 from glob import glob
 import string
@@ -30,7 +32,7 @@ OWNER_IDS = [268035643760836608, 801557845928706139]
 TESTING_MODE = True
 
 
-class Bot(BaseBot):
+class Bot(BaseBot, reporting):
 
     # Init which set the start of the bot and all the objects with in the bot
     def __init__(self):
@@ -238,6 +240,42 @@ class Bot(BaseBot):
                 int(ActionChannelId))
 
             return ActionChannel
+
+        except:
+            pass
+
+    async def getmodCmdChannel(self, id):
+        guild = self.getGuild(id)
+        modCmdChannelId = guild["modCmdChannel"]
+        try:
+            modCmdChannel = (self.get_guild(id)).get_channel(
+                int(modCmdChannelId))
+
+            return modCmdChannel
+
+        except:
+            pass
+
+    async def getnicknameChannel(self, id):
+        guild = self.getGuild(id)
+        nicknameChannelId = guild["nicknameChannel"]
+        try:
+            nicknameChannel = (self.get_guild(id)).get_channel(
+                int(nicknameChannelId))
+
+            return nicknameChannel
+
+        except:
+            pass
+
+    async def getCaseChannel(self, id):
+        guild = self.getGuild(id)
+        caseChannelId = guild["caseChannel"]
+        try:
+            caseChannel = (self.get_guild(id)).get_channel(
+                int(caseChannelId))
+
+            return caseChannel
 
         except:
             pass
