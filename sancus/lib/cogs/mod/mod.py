@@ -244,7 +244,7 @@ class Mod(
 
     @command()
     @has_permissions(manage_messages=True)
-    async def warn(self, ctx:Context, user: discord.Member, *, reason=None):
+    async def warn(self, ctx:Context, user: discord.Member, *, reason="No reason was provided"):
         """Warn a user
 
         Args:
@@ -255,8 +255,7 @@ class Mod(
         #Direct Warning
         embed = Embeds(
             title=f"Warning from {ctx.guild.name}",
-            description=f"Reason:\n{reason}",
-            timestamp=ctx.message.created_at
+            description=f"Reason:\n{reason}"
         )
 
         await user.send(embed=embed)
@@ -265,16 +264,13 @@ class Mod(
         #Case message
         embed = Embeds(
             title=f'{user.name} has been warned',
-            description=f'Reason: {reason}',
-            timestamp=ctx.message.created_at
+            description=f'Reason: {reason}'
         )
 
-        try:
-            channel = await self.client.getCaseChannel(ctx.guild.id)
-            await channel.send(embed=embed)
+        message = f"""{user.name} has been warned
+        Reason: `{reason}`"""
 
-        except:
-            pass
+        await self.client.caseReport(ctx, "Warning ⚠️", message)
         
         #Updating warnings on DB
         warning = warningObject(
@@ -292,7 +288,7 @@ class Mod(
     @has_permissions(manage_messages=True)
     async def warnings(self, ctx :Context):
         """Display all warning messages, 
-        TODO this will eventually be able to show warnings between a certain date
+        TODO this will eventually be able to show warnings between a certain date and paginator
         """
         embed = Embeds(
             title="List of warnings issued",
