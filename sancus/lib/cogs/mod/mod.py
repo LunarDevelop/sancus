@@ -252,15 +252,6 @@ class Mod(
         Member : Tag the member or member id to send them a dm warning.
         Reason : the reason for the warning.
         """
-        #Direct Warning
-        embed = Embeds(
-            title=f"Warning from {ctx.guild.name}",
-            description=f"Reason:\n{reason}"
-        )
-
-        await user.send(embed=embed)
-        await ctx.send(f"{user.mention} has been warned")
-
         #Case message
         embed = Embeds(
             title=f'{user.name} has been warned',
@@ -270,13 +261,25 @@ class Mod(
         message = f"""{user.name} has been warned
         Reason: `{reason}`"""
 
-        await self.client.caseReport(ctx, "Warning ⚠️", message)
+        case_num, msg_url = await self.client.caseReport(ctx, "Warning ⚠️", message)
+
+        #Direct Warning
+        embed = Embeds(
+            title=f"Warning from {ctx.guild.name}",
+            description=f"Reason:\n{reason}"
+        )
+
+        embed.set_author(name=f"Case #{case_num}")
+
+        await user.send(embed=embed)
+        await ctx.send(f"{user.mention} has been warned")
         
         #Updating warnings on DB
         warning = warningObject(
             username=user.name,
             id=user.id,
             reason=reason,
+            case_num=case_num,
             date=ctx.message.created_at.strftime("%d/%m/%y %I:%M:%S%p %Z")
         )
         warnings = self.client.guilds_[str(ctx.guild.id)]["warnings"]
