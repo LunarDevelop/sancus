@@ -253,26 +253,21 @@ class Mod(
         Reason : the reason for the warning.
         """
         #Direct Warning
-        embed = Embed(
+        embed = Embeds(
             title=f"Warning from {ctx.guild.name}",
             description=f"Reason:\n{reason}",
             timestamp=ctx.message.created_at
         )
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         await user.send(embed=embed)
         await ctx.send(f"{user.mention} has been warned")
 
         #Case message
-        embed = discord.Embed(
+        embed = Embeds(
             title=f'{user.name} has been warned',
             description=f'Reason: {reason}',
             timestamp=ctx.message.created_at
         )
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
 
         try:
             channel = await self.client.getCaseChannel(ctx.guild.id)
