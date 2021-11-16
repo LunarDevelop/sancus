@@ -1,7 +1,7 @@
-Warnings List 
-Give role
-Softban, removing message over past serval days
-Nuke a channel
+//Warnings List 
+//Give role
+//Softban, removing message over past serval days
+//Nuke a channel
 Recolour a role
 Auto Role
 leaving logging
@@ -21,4 +21,4 @@ pay respects command
 fortune command
 econ - workers earn money per message
 
-figure shards out
+//figure shards out -> AutoShardedBot added to handle it
