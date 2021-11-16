@@ -324,28 +324,6 @@ class Mod(
 
         await ctx.send(embed=embed)
 
-    # Show Avatar of a Player
-    @command()
-    @has_permissions(manage_messages=True)
-    async def avatar(self, ctx, member: discord.Member):
-        """Sends a bigger picture of the users avatar.
 
-        Args:
-
-        Member : The member you would like to see the avartar of
-        """
-
-        avatarURL = member.display_avatar.url
-
-        embed = Embed(
-            title=f"{member.name}#{member.discriminator}'s avatar",
-            colour=member.colour,
-            timestamp=datetime.utcnow()
-        )
-
-        embed.set_image(url=avatarURL)
-
-        embed.set_footer(text=self.client.embedAuthorName,
-                         icon_url=self.client.embedAuthorUrl)
-
-        await ctx.send(embed=embed)
+    
+    

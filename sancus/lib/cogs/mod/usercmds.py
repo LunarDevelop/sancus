@@ -1,16 +1,43 @@
 from discord.ext.commands.core import has_permissions
 from discord.member import Member
 from discord.ext.commands import Cog, command
-from discord.role import Role
+from sancus.functions.objects import Embeds
 from sancus.lib.bot import Bot
 from discord.ext.commands.context import Context
-
+import datetime
 
 class userCmds(Cog):
 
     def __init__(self, client) -> None:
         super().__init__()
         self.client : Bot = client
+
+    # Show Avatar of a Player
+    @command()
+    @has_permissions(manage_messages=True)
+    async def avatar(self, ctx, member: Member):
+        """Sends a bigger picture of the users avatar.
+
+        Args:
+
+        Member : The member you would like to see the avartar of
+        """
+
+        avatarURL = member.display_avatar.url
+
+        embed = Embeds(
+            title=f"{member.name}#{member.discriminator}'s avatar",
+            colour=member.colour,
+            timestamp=datetime.utcnow()
+        )
+
+        embed.set_image(url=avatarURL)
+
+        embed.set_footer(text=self.client.embedAuthorName,
+                         icon_url=self.client.embedAuthorUrl)
+
+        await ctx.send(embed=embed)
+
 
     @command()
     @has_permissions(manage_roles=True)
