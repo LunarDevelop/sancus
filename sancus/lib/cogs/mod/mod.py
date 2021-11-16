@@ -1,5 +1,6 @@
 
 import discord
+from discord.channel import TextChannel
 from discord.embeds import Embed
 from discord.ext.commands import command, Cog, Context, has_permissions
 
@@ -324,6 +325,13 @@ class Mod(
 
         await ctx.send(embed=embed)
 
-
-    
-    
+    @command()
+    @has_permissions(manage_channels=True)
+    async def nuke(self, ctx, channel: TextChannel):
+        """This command will wipe a channel, it does this by cloning the channel then deleting the old one.
+        
+        Arguments:
+        
+        `Channel:` the channel you want to nuke"""
+        await channel.clone(reason="Nuking a channel")
+        await channel.delete(reason="Nuking a channel")
