@@ -3,7 +3,9 @@ import discord
 from discord.embeds import Embed
 from discord.ext.commands import command, Cog, Context, has_permissions
 
-from datetime import datetime
+from datetime import datetime, timedelta
+
+from discord.member import Member
 
 from lib.bot import bot
 
@@ -152,6 +154,22 @@ class Mod(
         else:
             await ctx.send("You cannot ban this user!")
             return False
+
+    @command()
+    @has_permissions(ban_members=True)
+    async def softban(self, ctx : Context, member : Member, days):
+        """This command will delete a users messages from a certain amount of days
+        
+        Arguments:
+        
+        `Member:` the member in which you want to softban
+        `Days:` the number of days you want to remove messages from"""
+
+        date = datetime.utcnow() - timedelta(int(days))
+        for channel in ctx.guild.text_channels:
+            await channel.purge(limit=1000, check=lambda i:i.author.id == member.id, after=date)
+        
+        await ctx.send(f"A softban has been carried out on {member.mention}")
 
     # Unban User
     @command()
