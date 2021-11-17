@@ -2,6 +2,7 @@ import asyncio
 from asyncio.tasks import sleep
 from datetime import datetime
 from typing import Type
+from discord.shard import ShardInfo
 
 import websockets
 from .admin_slash import admin_slash
@@ -45,15 +46,31 @@ class Owner(
 ):
 
     def __init__(self, client):
-        self.client: Bot = client
+        self.client : Bot = client
 
         self.back_arrow = self.client.get_emoji(880261491587166229)
         self.forward_arrow = self.client.get_emoji(880261496167358484)
 
     @command()
     @is_owner()
-    async def shards(self, ctx):#Add an embed system to this command to display shard info
-        await ctx.send(self.client.shard_count)
+    async def shards(self, ctx):
+
+        total = self.client.shard_count
+        general_ping = self.client.latency
+
+        embed = Embeds(
+            title="Shard info",
+            description=f"""Total of shards: `{total}`
+                                General ping : `{round(general_ping*1000)}ms`"""
+        )
+
+        for shard in self.client.shards:
+            info : ShardInfo = self.client.shards[shard]
+            
+            embed.add_field(name=f"Shard id: `{shard}`", value=f"""Latency: `{round(info.latency*1000)}ms`
+            Is Rate Limited: `{info.is_ws_ratelimited()}`""")
+
+        await ctx.send(embed=embed)
         
     @command()
     @is_owner()
