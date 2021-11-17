@@ -1,6 +1,7 @@
 from discord.ext.commands.core import has_permissions
 from discord.member import Member
 from discord.ext.commands import Cog, command
+from discord.role import Role
 from sancus.functions.objects import Embeds
 from sancus.lib.bot import Bot
 from discord.ext.commands.context import Context
@@ -61,3 +62,21 @@ class userCmds(Cog):
             await user.add_roles(role)
             roleList += role.name +", "
         return await ctx.send(f"{user.mention} has been given the following roles: {roleList}")
+
+    @command(alias=["rc", "rolec", "rolecolor", "rcolor", "rcolour"])
+    @has_permissions(manage_roles=True)
+    async def rolecolour(self, ctx, role:Role, colour:str):
+        """A very simple command that will change the colour of the role you select to a colour of your choice
+        
+        All you need is the role and hex colour you would like to use.
+        
+        You can tag a role using `<@&roleID>` if you are unable to tag the role normally
+
+        For the hex code it can either include the `#` or not the system will add it in anyway,
+        Example: `#0f0f0f` and `0f0f0f` both work in this command
+        """
+        
+        if colour.startswith("#"):
+            del colour[0]
+
+        await role.edit(colour=int(colour, 16))
