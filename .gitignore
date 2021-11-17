@@ -5,4 +5,4 @@
 test.py
 sancus/data/
 TempRemoved.py
-.disabled
+*.disabled
