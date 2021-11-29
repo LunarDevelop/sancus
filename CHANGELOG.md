@@ -2,12 +2,12 @@
 #### Date 10/11/21
 
 ##### Added
-- Help command now uses interatction buttons
+- Help command now uses interaction buttons
 - Rock, Paper, scissors with button has been added
-- A hacker has been found inside of the bank, carefuly when doing payouts
+- A hacker has been found inside of the bank, be careful when doing payouts
 - Bulk message delete even added to logging
 - Footer added to all embeds
-- Cusom filter has been added
+- Custom filter has been added
 - Custom text and banner welcome messages
 
 ##### Removed
@@ -16,7 +16,7 @@
 
 ***
 
-###### From version 6 onwards versioning will follow the Semantic Versioning 2.0.0 style to record how the bot moves foward
+###### From version 6 onwards versioning will follow the Semantic Versioning 2.0.0 style to record how the bot moves forward
 
 ***
 
