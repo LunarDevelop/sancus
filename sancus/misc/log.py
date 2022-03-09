@@ -5,6 +5,9 @@ import discord
 
 dotenv.load_dotenv('.env')
 
+pyLogging.addLevelName(pyLogging.DEBUG+5, "GuildLogging")
+
+GUILDLOGGING = pyLogging.DEBUG+5
 
 class CustomFormatter(pyLogging.Formatter):
 
@@ -31,7 +34,7 @@ class CustomFormatter(pyLogging.Formatter):
         return formatter.format(record)
 
 
-def logging(name: str, level = pyLogging.WARNING, file : bool = False) -> pyLogging:
+def logging(name: str, level=pyLogging.WARNING, file: bool = False, fileName: str = "latest") -> pyLogging:
 
     logger = pyLogging.getLogger(name)
     logger.setLevel(level)
@@ -40,14 +43,13 @@ def logging(name: str, level = pyLogging.WARNING, file : bool = False) -> pyLogg
     c_handler.setFormatter(CustomFormatter())
     logger.addHandler(c_handler)
 
-
     # Create formatters and add it to handlers
     if file:
-        f_handler = pyLogging.FileHandler('logs/latest.log', 'w')
+        f_handler = pyLogging.FileHandler(f'logs/{fileName}.log', 'w')
         f_format = pyLogging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s',  datefmt='%d-%b-%y %H:%M:%S')
-        f_handler.setFormatter(f_format)    
-        f_handler.setLevel(pyLogging.WARNING)
+        f_handler.setFormatter(f_format)
+        f_handler.setLevel(level)
         logger.addHandler(f_handler)
-    
+
     return logger
