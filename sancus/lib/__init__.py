@@ -25,8 +25,8 @@ class Bot(discord.Client):
     # init the main bot with all global variables needed
     def __init__(self, *args, **options: Any):
 
+        # Global Variables
         self.ready = False
-        
         self.logger = logging('local', level=pyLogging.DEBUG, file=True)
 
         super().__init__(**options)
@@ -41,8 +41,17 @@ class Bot(discord.Client):
         # Ensures the bot knows that it is ready
         if not self.ready:
             self.ready = True
-            
+
             self.logger.info(f"{self.user.name} is now up and running!!")
+
+    # On Connect
+    async def on_connect(self):
+        self.logger.info(f"{self.user.name} has connected to Discord services")
+
+    # On Disconnect
+    async def on_disconnect(self):
+        self.logger.error(
+            f"{self.user.name} has been disconnected from Discord services")
 
 
 bot = Bot()
