@@ -1,7 +1,3 @@
 *.pyc
-.idea/
-.vs/
+.env
 .vscode/
-test.py
-sancus/data/
-TempRemoved.py
