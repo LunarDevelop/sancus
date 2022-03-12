@@ -13,8 +13,8 @@ namespace Sancus
 {
     public class Program
     {
-        private static DiscordSocketClient client;
-        private static SocketGuild test_guild;
+        public static DiscordSocketClient client;
+        public static SocketGuild test_guild;
 
         private Acting actSlash = new Acting();
         private ActMsg actMsg = new ActMsg();
