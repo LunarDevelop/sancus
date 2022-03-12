@@ -28,7 +28,7 @@ namespace Sancus
             var dotenv = Path.Combine(root, ".env");
             DotEnv.Load(dotenv);
 
-            Test_guild = client.GetGuild(780211278614364160);
+            test_guild = client.GetGuild(780211278614364160);
 
             client.Log += Log;
             Console.WriteLine(Environment.GetEnvironmentVariable("token"));
