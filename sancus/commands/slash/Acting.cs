@@ -18,7 +18,7 @@ namespace sancus.commands.slash
                 case "add-role":
                     await HandleAddRoleCommand(command);
                     break;
-                
+
                 case "ping":
                     await HandlePingCommand(command);
                     break;
@@ -76,8 +76,8 @@ namespace sancus.commands.slash
 
         private async Task HandlePingCommand(SocketSlashCommand command)
         {
-            
-            var message = String.Format("Latency: `{0}ms`", Program._client.Latency);
+
+            var message = String.Format("Latency: `{0}ms`", Program.client.Latency);
 
             var embedBuiler = new EmbedBuilder()
                 .WithTitle("Ping Checker")

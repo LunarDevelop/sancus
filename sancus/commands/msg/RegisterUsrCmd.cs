@@ -11,7 +11,7 @@ namespace sancus.commands.msg
 
         public static async Task registerCmd()
         {
-            SocketGuild test_guild = Program._client.GetGuild(780211278614364160);
+            SocketGuild test_guild = Program.client.GetGuild(780211278614364160);
             var guildMsgCmd = new MessageCommandBuilder()
                 .WithName("lockdown");
 

@@ -13,7 +13,7 @@ namespace Sancus.commands.slash
             ulong test_guildID = 780211278614364160;
             List<SlashCommandBuilder> CmdList = new List<SlashCommandBuilder>();
 
-            var guild = Program._client.GetGuild(test_guildID);
+            var guild = Program.client.GetGuild(test_guildID);
 
             // Say Command
             var sayCmd = new SlashCommandBuilder()
@@ -57,7 +57,7 @@ namespace Sancus.commands.slash
             // Ping Cmd
             var pingCmd = new SlashCommandBuilder()
                 .WithName("ping")
-                .WithDescription(String.Format("Check the latency {0}", Program._client.CurrentUser.Username));
+                .WithDescription(String.Format("Check the latency {0}", Program.client.CurrentUser.Username));
             CmdList.Add(pingCmd);
 
             // Register Commands
